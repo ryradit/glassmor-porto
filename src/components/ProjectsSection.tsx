@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 interface Project {
   id: number;
@@ -27,7 +26,7 @@ const ProjectsSection = () => {
       description: 'Developed a modern company website for Seido Mitra Abadi featuring professional design, responsive layout, and dynamic content management. Built with Next.js and TailwindCSS for optimal performance.',
       longDescription: 'A comprehensive corporate website featuring modern design principles, responsive layout, and efficient content management. The project showcases professional web development skills with emphasis on performance optimization and user experience.',
       tech: ['Next.js', 'React', 'TailwindCSS', 'TypeScript'],
-      image: 'https://www.ryradit.my.id/imagess/seido.png',
+      image: '/api/placeholder/400/250', // Using placeholder for now
       liveUrl: 'https://seidomitraabadi.vercel.app/',
       githubUrl: '#',
       category: 'Web Development'
@@ -38,7 +37,7 @@ const ProjectsSection = () => {
       description: 'Developed Merra AI as AI Software Engineer, an AI-powered co-pilot for interviewers that assists with question generation, real-time response analysis, and provides post-interview insights.',
       longDescription: 'An innovative AI-powered platform designed to revolutionize the interview process. Features include intelligent question generation, real-time candidate response analysis, and comprehensive post-interview insights to help make better hiring decisions.',
       tech: ['AI', 'SaaS', 'Next.js', 'Python', 'OpenAI'],
-      image: 'https://www.ryradit.my.id/imagess/merra.png',
+      image: '/api/placeholder/400/250', // Using placeholder for now
       liveUrl: 'https://www.trymerra.ai/',
       githubUrl: '#',
       category: 'AI/ML'
@@ -49,7 +48,7 @@ const ProjectsSection = () => {
       description: 'Developed an AI-enhanced website for \'King Barbershop\', featuring intelligent functionalities. Combines modern web development with AI capabilities for enhanced user experience.',
       longDescription: 'An innovative barbershop website that integrates AI technologies to provide enhanced customer experience. Features include intelligent booking system, personalized recommendations, and modern responsive design.',
       tech: ['AI', 'Web Development', 'Next.js', 'React', 'TypeScript'],
-      image: 'https://www.ryradit.my.id/imagess/kingbarber.png',
+      image: '/api/placeholder/400/250', // Using placeholder for now
       liveUrl: 'https://king-barbershop.vercel.app/',
       githubUrl: 'https://github.com/ryradit/King-Barbershop',
       category: 'AI/ML'
@@ -60,7 +59,7 @@ const ProjectsSection = () => {
       description: 'Focused research on Indonesian Large Language Models (LLMs) for mental health applications, aiming to build empathetic and supportive conversational AI systems using NLP techniques.',
       longDescription: 'Groundbreaking research project focusing on developing Indonesian Large Language Models specifically for mental health applications. The project aims to create empathetic AI systems that can provide supportive conversations and mental health assistance in the Indonesian language.',
       tech: ['LLMs', 'NLP', 'Python', 'PyTorch', 'Transformers'],
-      image: 'https://www.ryradit.my.id/imagess/mentalhealth.png',
+      image: '/api/placeholder/400/250', // Using placeholder for now
       liveUrl: 'https://medium.com/@ryradit/idmentalbert-for-enhancing-conversational-intelligence-in-indonesian-e26862f260a2',
       githubUrl: '#',
       category: 'Research'
@@ -71,7 +70,7 @@ const ProjectsSection = () => {
       description: 'Role: Android Developer. Developed an Android app to connect users with shared hobbies, featuring user profiles, event scheduling, and real-time notifications.',
       longDescription: 'A comprehensive mobile application designed to connect sports enthusiasts and facilitate sports booking. Features include user profile management, event scheduling, real-time notifications, and community building functionalities.',
       tech: ['Android Development', 'Mobile App', 'Java/Kotlin', 'Firebase'],
-      image: 'https://www.ryradit.my.id/imagess/sweat.png',
+      image: '/api/placeholder/400/250', // Using placeholder for now
       liveUrl: '#',
       githubUrl: '#',
       category: 'Mobile Development'
@@ -156,18 +155,30 @@ const ProjectsSection = () => {
                 {/* Project Image */}
                 <div className="relative h-48 overflow-hidden">
                   <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                    <Image 
-                      src={project.image || '/api/placeholder/400/250'} 
-                      alt={project.title}
-                      width={400}
-                      height={250}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      onError={(e) => {
-                        // Fallback to gradient background with icon
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                      }}
-                    />
+                    {/* Category-based SVG Icons */}
+                    <div className="w-full h-full flex items-center justify-center">
+                      {project.category === 'Web Development' && (
+                        <svg className="w-20 h-20 text-blue-300/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      )}
+                      {project.category === 'AI/ML' && (
+                        <svg className="w-20 h-20 text-purple-300/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                      )}
+                      {project.category === 'Research' && (
+                        <svg className="w-20 h-20 text-green-300/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                      )}
+                      {project.category === 'Mobile Development' && (
+                        <svg className="w-20 h-20 text-pink-300/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a1 1 0 001-1V4a1 1 0 00-1-1H8a1 1 0 00-1 1v16a1 1 0 001 1z" />
+                        </svg>
+                      )}
+                    </div>
+                    
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     
