@@ -16,7 +16,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hi! I'm Ryan's AI assistant. I can help you learn about his background, projects, and skills. How can I assist you today?",
+      text: "Hi! I&apos;m Ryan&apos;s AI assistant. I can help you learn about his background, projects, and skills. How can I assist you today?",
       isUser: false,
       timestamp: new Date()
     }
@@ -93,7 +93,7 @@ const ChatBot = () => {
       };
 
       setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
+    } catch {
       const errorMessage: Message = {
         id: Date.now() + 1,
         text: "I'm having trouble connecting to my AI brain right now. Please try again in a moment, or feel free to contact Ryan directly at ryradit@gmail.com",
@@ -149,7 +149,7 @@ const ChatBot = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Ryan's AI Assistant</h3>
+                <h3 className="text-white font-semibold text-sm">Ryan&apos;s AI Assistant</h3>
                 <p className="text-green-400 text-xs flex items-center">
                   <span className="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
                   Online
@@ -190,7 +190,7 @@ const ChatBot = () => {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                         </svg>
-                        <span>Download Ryan's CV</span>
+                        <span>Download Ryan&apos;s CV</span>
                       </button>
                     </div>
                   )}

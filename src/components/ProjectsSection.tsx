@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface Project {
   id: number;
@@ -155,9 +156,11 @@ const ProjectsSection = () => {
                 {/* Project Image */}
                 <div className="relative h-48 overflow-hidden">
                   <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                    <img 
+                    <Image 
                       src={project.image || '/api/placeholder/400/250'} 
                       alt={project.title}
+                      width={400}
+                      height={250}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
                         // Fallback to gradient background with icon
