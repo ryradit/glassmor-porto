@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Navigation = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,10 +10,14 @@ const Navigation = () => {
   const [isFeaturesDropdownOpen, setIsFeaturesDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   useEffect(() => {
     setIsVisible(true);
     
     const handleScroll = () => {
+      if (pathname !== '/') return;
       const sections = ['home', 'about', 'skills', 'projects', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
@@ -32,7 +38,7 @@ const Navigation = () => {
       if (!target.closest('.features-dropdown')) {
         setIsFeaturesDropdownOpen(false);
       }
-      if (!target.closest('nav')) {
+      if (!target.closest('nav') && !target.closest('header')) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -44,12 +50,16 @@ const Navigation = () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [pathname]);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (pathname !== '/') {
+      router.push(`/#${sectionId}`);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -63,48 +73,161 @@ const Navigation = () => {
 
   const featuresItems = [
     {
+      id: 'career-pathfinder',
+      label: 'AI Multi-Agent Career Pathfinder',
+      description: 'Orchestrate parallel AI agents to map your career destiny.',
+      route: '/playground/career-pathfinder'
+    },
+    {
       id: 'ai-interview',
       label: 'AI-Powered Interview Practice',
-      description: 'Practice interviews with AI feedback',
-      comingSoon: true
+      description: 'Practice mock technical interviews with an AI Tech Lead.',
+      route: '/playground/ai-interview'
     },
     {
       id: 'cv-analyzer',
       label: 'AI-Powered CV Analyzer',
-      description: 'Analyze and improve your CV with AI',
-      comingSoon: true
+      description: 'Analyze and optimize your PDF resume against recruiter algorithms.',
+      route: '/playground/cv-analyzer'
     },
     {
       id: 'cv-builder',
       label: 'AI-Powered CV Builder',
-      description: 'Build professional CVs with AI assistance',
-      comingSoon: true
+      description: 'Build professional, high-fidelity CV sheets in real-time.',
+      route: '/playground/cv-builder'
     },
     {
       id: 'case-study',
       label: 'AI-Powered Live Case Study Practice',
-      description: 'Practice case studies with real-time AI guidance',
-      comingSoon: true
+      description: 'Audit strategy briefs using SWOT & MECE frameworks.',
+      route: '/playground/case-study'
     }
   ];
 
+  const navbarBrand = (
+    <div className="flex flex-col items-start leading-none">
+      <span className="text-xl font-black tracking-widest bg-gradient-to-r from-purple-400 via-pink-500 to-rose-400 bg-clip-text text-transparent animate-pulse drop-shadow-[0_0_10px_rgba(168,85,247,0.45)]">
+        EARTH-X
+      </span>
+      <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase mt-0.5 ml-0.5">
+        by Ryan
+      </span>
+    </div>
+  );
+
+  const toggleFeaturesDropdown = () => {
+    setIsFeaturesDropdownOpen(!isFeaturesDropdownOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-      <div className="max-w-6xl mx-auto">
-        <div className="glass rounded-full px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold gradient-text">
-              Ryan Radityatama
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+      <div className="max-w-6xl mx-auto px-6 py-4">
+        <nav className="glass-card px-6 py-4 border border-purple-500/10 flex items-center justify-between shadow-lg shadow-purple-950/5">
+          {/* Logo / Brand */}
+          <button onClick={() => scrollToSection('home')} className="flex items-center space-x-2 text-left focus:outline-none">
+            {navbarBrand}
+          </button>
+
+          {/* Desktop Nav Items */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`text-sm font-semibold tracking-wide uppercase transition-colors duration-300 hover:text-white focus:outline-none ${
+                  pathname === '/' && activeSection === item.id ? 'text-purple-400 font-black' : 'text-gray-300'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+
+            {/* Features Dropdown Trigger */}
+            <div className="relative features-dropdown">
+              <button
+                onClick={toggleFeaturesDropdown}
+                className="flex items-center space-x-1.5 text-sm font-semibold tracking-wide uppercase text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none"
+              >
+                <span>My Playground</span>
+                <svg 
+                  className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${
+                    isFeaturesDropdownOpen ? 'rotate-180' : ''
+                  }`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isFeaturesDropdownOpen && (
+                <div className="absolute top-full mt-2 right-0 w-80 glass-card rounded-2xl p-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="space-y-3">
+                    {featuresItems.map((feature) => (
+                      <Link 
+                        key={feature.id}
+                        href={feature.route}
+                        className="group p-3 rounded-xl transition-all duration-300 hover:bg-purple-600/20 cursor-pointer relative block text-left"
+                        onClick={() => {
+                          setIsFeaturesDropdownOpen(false);
+                        }}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <h4 className="text-white font-semibold text-sm group-hover:text-purple-400 transition-all duration-300">
+                                {feature.label}
+                              </h4>
+                            </div>
+                            <p className="text-gray-400 text-[10px] leading-relaxed">
+                              {feature.description}
+                            </p>
+                          </div>
+                          <div className="text-purple-400 ml-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            
-            <div className="hidden md:flex space-x-8 items-center">
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden text-gray-300 hover:text-white p-1 hover:bg-purple-600/10 rounded-lg transition-colors focus:outline-none"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </nav>
+
+        {/* Mobile Navigation Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden glass-card mt-2 rounded-2xl p-4 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex flex-col space-y-2">
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 rounded-full transition-all duration-300 ${
-                    activeSection === item.id
-                      ? 'bg-purple-600 text-white glow'
+                  onClick={() => {
+                    scrollToSection(item.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-300 focus:outline-none ${
+                    pathname === '/' && activeSection === item.id 
+                      ? 'text-purple-400 bg-purple-950/40 font-black' 
                       : 'text-gray-300 hover:text-white hover:bg-purple-600/20'
                   }`}
                 >
@@ -112,147 +235,34 @@ const Navigation = () => {
                 </button>
               ))}
               
-              {/* Features Dropdown */}
-              <div className="relative features-dropdown">
-                <button
-                  onClick={() => setIsFeaturesDropdownOpen(!isFeaturesDropdownOpen)}
-                  className="flex items-center space-x-1 px-4 py-2 rounded-full transition-all duration-300 text-gray-300 hover:text-white hover:bg-purple-600/20"
-                >
-                  <span>Features</span>
-                  <svg 
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      isFeaturesDropdownOpen ? 'rotate-180' : ''
-                    }`} 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {/* Dropdown Menu */}
-                {isFeaturesDropdownOpen && (
-                  <div className="absolute top-full mt-2 right-0 w-80 glass-card rounded-2xl p-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="space-y-3">
-                      {featuresItems.map((feature) => (
-                        <div 
-                          key={feature.id}
-                          className="group p-3 rounded-xl transition-all duration-300 hover:bg-purple-600/20 cursor-pointer relative"
-                          onClick={() => {
-                            // Handle feature click - could show modal or navigate
-                            console.log(`Clicked on ${feature.label}`);
-                          }}
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <h4 className="text-white font-semibold text-sm group-hover:gradient-text transition-all duration-300">
-                                  {feature.label}
-                                </h4>
-                                {feature.comingSoon && (
-                                  <span className="px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs rounded-full">
-                                    Soon
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-gray-400 text-xs leading-relaxed">
-                                {feature.description}
-                              </p>
-                            </div>
-                            <div className="text-purple-400 ml-2">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    {/* Footer */}
-                    <div className="mt-4 pt-3 border-t border-purple-500/20">
-                      <p className="text-center text-xs text-gray-400">
-                        🚀 Exciting AI features coming soon! All are free!
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button 
-                className="text-white p-2"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                <svg 
-                  className={`w-6 h-6 transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : ''}`} 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  {isMobileMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-          {/* Mobile Navigation */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden mt-4 pt-4 border-t border-purple-500/20">
-              <div className="space-y-2">
-                {navItems.map((item) => (
-                  <button
-                    key={item.id}
+              {/* Mobile Features Section */}
+              <div className="pt-2">
+                <div className="text-gray-400 text-sm font-semibold mb-2 px-4">My Playground</div>
+                {featuresItems.map((feature) => (
+                  <Link
+                    key={feature.id}
+                    href={feature.route}
+                    className="w-full text-left px-4 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-purple-600/10 block"
                     onClick={() => {
-                      scrollToSection(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-300 ${
-                      activeSection === item.id
-                        ? 'bg-purple-600 text-white'
-                        : 'text-gray-300 hover:text-white hover:bg-purple-600/20'
-                    }`}
                   >
-                    {item.label}
-                  </button>
-                ))}
-                
-                {/* Mobile Features Section */}
-                <div className="pt-2">
-                  <div className="text-gray-400 text-sm font-semibold mb-2 px-4">Features</div>
-                  {featuresItems.map((feature) => (
-                    <button
-                      key={feature.id}
-                      className="w-full text-left px-4 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-purple-600/10"
-                      onClick={() => {
-                        console.log(`Clicked on ${feature.label}`);
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">{feature.label}</span>
-                        {feature.comingSoon && (
-                          <span className="px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs rounded-full">
-                            Soon
-                          </span>
-                        )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs">{feature.label}</span>
+                      <div className="text-purple-400 ml-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
                       </div>
-                    </button>
-                  ))}
-                </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </nav>
+    </header>
   );
 };
 
