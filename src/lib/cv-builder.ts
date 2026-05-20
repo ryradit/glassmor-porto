@@ -79,14 +79,7 @@ export async function improveExperienceAction(bullet: string, role: string, mode
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('API key not configured');
 
-  let modeInstructions = "4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.";
-  if (mode === 'expand') {
-    modeInstructions = "4. Expand on the details. Extrapolate from the given information to generate EXACTLY ONE NEW bullet point. The total number of bullets in your output MUST be exactly one more than the original.";
-  } else if (mode === 'condense') {
-    modeInstructions = "4. Condense the details. Remove the least impactful bullet point. The total number of bullets in your output MUST be exactly one less than the original.";
-  }
-
-  const prompt = `You are a professional resume editor.
+  let prompt = `You are a professional resume editor.
 Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}".
 
 Original Responsibilities:
@@ -96,9 +89,38 @@ Instructions:
 1. Use the STAR methodology (Situation, Task, Action, Result) where possible.
 2. Use strong action verbs (e.g., Designed, Spearheaded, Optimized).
 3. Do not invent completely unrelated details, but expand professionally on implied tasks.
-${modeInstructions}
+4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.
 5. Ensure each point is highly descriptive and avoids excessively long, wordy sentences that drift off-topic.
 6. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
+
+  if (mode === 'expand') {
+    prompt = `You are a professional resume editor.
+Your task is to ADD EXACTLY ONE NEW bullet point to the following job responsibilities. 
+DO NOT modify, edit, or remove ANY of the original bullet points. Keep them exactly as they are.
+Simply append one new highly professional bullet point that highlights implied skills for the target role of "${role}".
+
+Original Responsibilities:
+"${bullet}"
+
+Instructions:
+1. The output MUST contain all the original points EXACTLY as they are written above.
+2. Add exactly one new bullet point at the end.
+3. The new point should use strong action verbs and the STAR methodology where possible.
+4. Return ONLY the final text. Do not include introductory notes, quotes, or markdown wrappers.`;
+  } else if (mode === 'condense') {
+    prompt = `You are a professional resume editor.
+Your task is to CONDENSE the following job responsibilities for the target role of "${role}".
+
+Original Responsibilities:
+"${bullet}"
+
+Instructions:
+1. Use the STAR methodology (Situation, Task, Action, Result) where possible.
+2. Use strong action verbs (e.g., Designed, Spearheaded, Optimized).
+3. Remove the least impactful bullet point. The total number of bullets in your output MUST be exactly one less than the original.
+4. Ensure each remaining point is highly descriptive and avoids excessively long, wordy sentences.
+5. Return ONLY the final text. Do not include introductory notes, quotes, or markdown wrappers.`;
+  }
 
   const data = await callGemini(
     {
