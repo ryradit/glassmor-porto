@@ -42,15 +42,15 @@ export default function CaseStudyLandingPage() {
             <ul className="space-y-3 text-xs text-gray-400 font-medium">
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Scenario Slider**: Select complex growth briefs across software, logistics, and retail industries.</span>
+                <span><strong className="text-white font-bold">Scenario Slider</strong>: Select complex growth briefs across software, logistics, and retail industries.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Framework Boards**: Structure SWOT matrices and indented MECE trees dynamically.</span>
+                <span><strong className="text-white font-bold">Framework Boards</strong>: Structure SWOT matrices and indented MECE trees dynamically.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**AI Partner Critique**: Immediate strategic grading against top tier consulting standards.</span>
+                <span><strong className="text-white font-bold">AI Partner Critique</strong>: Immediate strategic grading against top tier consulting standards.</span>
               </li>
             </ul>
           </div>

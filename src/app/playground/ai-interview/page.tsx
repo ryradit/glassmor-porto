@@ -42,15 +42,15 @@ export default function AIInterviewLandingPage() {
             <ul className="space-y-3 text-xs text-gray-400 font-medium">
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Virtual Video Terminal**: Immersive live holographic simulator feeds.</span>
+                <span><strong className="text-white font-bold">Virtual Video Terminal</strong>: Immersive live holographic simulator feeds.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Customized Role Config**: Toggle experience tiers (Junior, Senior, Lead) and tracks (Frontend, ML, Fullstack).</span>
+                <span><strong className="text-white font-bold">Customized Role Config</strong>: Toggle experience tiers (Junior, Senior, Lead) and tracks (Frontend, ML, Fullstack).</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Real-Time Grading Audits**: Deep qualitative feedback and quantitative scoring grids.</span>
+                <span><strong className="text-white font-bold">Real-Time Grading Audits</strong>: Deep qualitative feedback and quantitative scoring grids.</span>
               </li>
             </ul>
           </div>

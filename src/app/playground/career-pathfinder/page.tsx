@@ -42,15 +42,15 @@ export default function CareerPathfinderLandingPage() {
             <ul className="space-y-3 text-xs text-gray-400 font-medium">
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Multilingual Chat Interface**: Vent, rant, or share career aspirations in 9 supported languages.</span>
+                <span><strong className="text-white font-bold">Multilingual Chat Interface</strong>: Vent, rant, or share career aspirations in 9 supported languages.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Dynamic Vibe Detector**: Real-time keyword scanning matches emotional tone and latent passion.</span>
+                <span><strong className="text-white font-bold">Dynamic Vibe Detector</strong>: Real-time keyword scanning matches emotional tone and latent passion.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Autonomous Synthesis**: Cooperating agents compile qualitative critiques and interactive blueprint roadmaps.</span>
+                <span><strong className="text-white font-bold">Autonomous Synthesis</strong>: Cooperating agents compile qualitative critiques and interactive blueprint roadmaps.</span>
               </li>
             </ul>
           </div>

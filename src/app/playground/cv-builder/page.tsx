@@ -42,15 +42,15 @@ export default function CVBuilderLandingPage() {
             <ul className="space-y-3 text-xs text-gray-400 font-medium">
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Real-time Editor**: Modify summaries, job titles, and experiences on the fly.</span>
+                <span><strong className="text-white font-bold">Real-time Editor</strong>: Modify summaries, job titles, and experiences on the fly.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Theme Toggle Layouts**: Instantly change styles (Glassmorphic, Cyber Dark, Minimalist).</span>
+                <span><strong className="text-white font-bold">Theme Toggle Layouts</strong>: Instantly change styles (Glassmorphic, Cyber Dark, Minimalist).</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Structured JSON Export**: One-click copies standard data objects to clipboard.</span>
+                <span><strong className="text-white font-bold">Structured JSON Export</strong>: One-click copies standard data objects to clipboard.</span>
               </li>
             </ul>
           </div>

@@ -42,15 +42,15 @@ export default function CVAnalyzerLandingPage() {
             <ul className="space-y-3 text-xs text-gray-400 font-medium">
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Roadblock scanner**: Extracts critical ATS format and style warnings.</span>
+                <span><strong className="text-white font-bold">Roadblock scanner</strong>: Extracts critical ATS format and style warnings.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**Keyword Heatmap**: Computes term frequency matching for technical recruiters.</span>
+                <span><strong className="text-white font-bold">Keyword Heatmap</strong>: Computes term frequency matching for technical recruiters.</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <span className="text-purple-400 font-bold">✓</span>
-                <span>**AI Rewrite Proposals**: Before-and-after micro-copy refinements.</span>
+                <span><strong className="text-white font-bold">AI Rewrite Proposals</strong>: Before-and-after micro-copy refinements.</span>
               </li>
             </ul>
           </div>
