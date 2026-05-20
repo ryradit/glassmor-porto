@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useReactToPrint } from 'react-to-print';
 import { 
   improveSummaryAction, 
   improveExperienceAction, 
@@ -14,6 +15,7 @@ import {
   Certification
 } from '@/lib/cv-builder';
 import universities from '../../../../../universities.json';
+import { exportToDocx } from '@/lib/docx-export';
 
 export default function CVBuilderPage() {
   const [name, setName] = useState<string>('');
@@ -46,6 +48,12 @@ export default function CVBuilderPage() {
   const [skillsError, setSkillsError] = useState<string>('');
   const [uniSearchResults, setUniSearchResults] = useState<Record<number, string[]>>({});
   const [activeEduSearchIdx, setActiveEduSearchIdx] = useState<number | null>(null);
+
+  const componentRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    documentTitle: `${name || 'CV'}_Resume`,
+  });
 
   const handleLoadDemo = () => {
     setName('Alex Morgan');
@@ -890,6 +898,20 @@ export default function CVBuilderPage() {
               </div>
 
               <button
+                onClick={() => handlePrint()}
+                className="px-3.5 py-1.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/35 hover:to-cyan-500/35 text-[9px] font-black uppercase tracking-widest rounded-lg border border-blue-500/35 text-white transition-all duration-300"
+              >
+                <span>🖨️ Print PDF</span>
+              </button>
+
+              <button
+                onClick={() => exportToDocx({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages, certifications })}
+                className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/35 hover:to-teal-500/35 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-500/35 text-white transition-all duration-300"
+              >
+                <span>📝 Word DOCX</span>
+              </button>
+
+              <button
                 onClick={handleCopy}
                 className="px-3.5 py-1.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/35 hover:to-pink-500/35 text-[9px] font-black uppercase tracking-widest rounded-lg border border-purple-500/35 text-white transition-all duration-300"
               >
@@ -899,12 +921,12 @@ export default function CVBuilderPage() {
           </div>
 
           {/* Dynamic document sheets wrapper */}
-          <div className={`p-8 rounded-3xl border shadow-2xl relative transition-all duration-500 min-h-[600px] overflow-hidden ${
+          <div ref={componentRef} className={`print:w-full print:m-0 print:p-8 print:shadow-none p-8 rounded-3xl border shadow-2xl relative transition-all duration-500 min-h-[600px] overflow-hidden ${
             template === 'glass'
-              ? 'glass-card border-purple-500/10 text-gray-200 shadow-purple-950/5'
+              ? 'glass-card border-purple-500/10 text-gray-200 shadow-purple-950/5 print:bg-white print:text-black print:border-none'
               : template === 'cyber'
-              ? 'bg-[#030108] border-[#29173d] text-cyan-300 shadow-2xl font-mono'
-              : 'bg-white border-zinc-200 text-zinc-800 font-sans shadow-lg'
+              ? 'bg-[#030108] border-[#29173d] text-cyan-300 shadow-2xl font-mono print:bg-white print:text-black print:border-none'
+              : 'bg-white border-zinc-200 text-zinc-800 font-sans shadow-lg print:border-none'
           }`}>
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none rounded-3xl" />
             
