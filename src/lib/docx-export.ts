@@ -70,7 +70,7 @@ export const exportToDocx = async (data: CVData) => {
       );
 
       if (exp.bullets) {
-        const bulletPoints = exp.bullets.split('\n').map(b => b.trim().replace(/^[-•]\s*/, '')).filter(b => b.length > 0);
+        const bulletPoints = exp.bullets.split('\n').map(b => b.trim().replace(/^[-*•]\s*/, '')).filter(b => b.length > 0);
         bulletPoints.forEach((bullet) => {
           sections.push(
             new Paragraph({

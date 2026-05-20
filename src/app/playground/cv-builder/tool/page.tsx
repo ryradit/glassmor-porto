@@ -998,9 +998,20 @@ export default function CVBuilderPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-sm leading-relaxed text-zinc-700 pt-1.5 whitespace-pre-line">
-                            {exp.bullets || 'Describe your daily workflow achievements...'}
-                          </p>
+                          <div className="text-sm leading-relaxed text-zinc-700 pt-1.5 space-y-1.5">
+                            {exp.bullets ? exp.bullets.split('\n').map((bullet, bIdx) => {
+                              const cleanBullet = bullet.trim().replace(/^[-*•]\s*/, '');
+                              if (!cleanBullet) return null;
+                              return (
+                                <div key={bIdx} className="flex items-start">
+                                  <span className="mr-2 text-zinc-950 font-bold">•</span>
+                                  <span>{cleanBullet}</span>
+                                </div>
+                              );
+                            }) : (
+                              <p className="italic">Describe your daily workflow achievements...</p>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
