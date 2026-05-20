@@ -6,6 +6,7 @@ import {
   improveSummaryAction, 
   improveExperienceAction, 
   generateCoverLetterAction,
+  improveSkillsAction,
   Experience,
   CVData,
   Education,
@@ -30,6 +31,8 @@ export default function CVBuilderPage() {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isPolishingSummary, setIsPolishingSummary] = useState<boolean>(false);
   const [polishingIndex, setPolishingIndex] = useState<number | null>(null);
+  const [isPolishingHardSkills, setIsPolishingHardSkills] = useState<boolean>(false);
+  const [isPolishingSoftSkills, setIsPolishingSoftSkills] = useState<boolean>(false);
   
   const [targetCompany, setTargetCompany] = useState<string>('TechFlow Inc.');
   const [coverLetter, setCoverLetter] = useState<string>('');
@@ -37,6 +40,7 @@ export default function CVBuilderPage() {
   const [letterError, setLetterError] = useState<string>('');
   const [summaryError, setSummaryError] = useState<string>('');
   const [experienceErrors, setExperienceErrors] = useState<Record<number, string>>({});
+  const [skillsError, setSkillsError] = useState<string>('');
 
   const handleLoadDemo = () => {
     setName('Alex Morgan');
@@ -152,6 +156,36 @@ export default function CVBuilderPage() {
       setExperienceErrors(prev => ({ ...prev, [index]: 'Failed to polish experience. Verify API key.' }));
     } finally {
       setPolishingIndex(null);
+    }
+  };
+
+  const handlePolishSkills = async (type: 'hard' | 'soft') => {
+    const skillsToPolish = type === 'hard' ? hardSkills : softSkills;
+    if (!skillsToPolish.trim()) return;
+    
+    if (type === 'hard') {
+      setIsPolishingHardSkills(true);
+    } else {
+      setIsPolishingSoftSkills(true);
+    }
+    setSkillsError('');
+    
+    try {
+      const result = await improveSkillsAction(skillsToPolish, title, type);
+      if (type === 'hard') {
+        setHardSkills(result);
+      } else {
+        setSoftSkills(result);
+      }
+    } catch (err) {
+      console.error(err);
+      setSkillsError('Failed to polish skills. Verify API key.');
+    } finally {
+      if (type === 'hard') {
+        setIsPolishingHardSkills(false);
+      } else {
+        setIsPolishingSoftSkills(false);
+      }
     }
   };
 
@@ -508,7 +542,16 @@ export default function CVBuilderPage() {
               
               <div className="space-y-2.5">
                 <div className="space-y-1">
-                  <label className="text-[8px] font-bold uppercase text-zinc-500">Hard Skills (Comma-separated)</label>
+                  <div className="flex justify-between items-center">
+                    <label className="text-[8px] font-bold uppercase text-zinc-500">Hard Skills (Comma-separated)</label>
+                    <button
+                      onClick={() => handlePolishSkills('hard')}
+                      disabled={isPolishingHardSkills || !hardSkills.trim()}
+                      className="text-[8px] px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-400 font-bold uppercase rounded hover:bg-purple-500/20 transition-all disabled:opacity-50"
+                    >
+                      <span>{isPolishingHardSkills ? '⏳ Polishing...' : '✨ AI Polish'}</span>
+                    </button>
+                  </div>
                   <textarea
                     value={hardSkills}
                     placeholder="React, Next.js, Node.js, PyTorch..."
@@ -517,7 +560,16 @@ export default function CVBuilderPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[8px] font-bold uppercase text-zinc-500">Soft Skills (Comma-separated)</label>
+                  <div className="flex justify-between items-center">
+                    <label className="text-[8px] font-bold uppercase text-zinc-500">Soft Skills (Comma-separated)</label>
+                    <button
+                      onClick={() => handlePolishSkills('soft')}
+                      disabled={isPolishingSoftSkills || !softSkills.trim()}
+                      className="text-[8px] px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-400 font-bold uppercase rounded hover:bg-purple-500/20 transition-all disabled:opacity-50"
+                    >
+                      <span>{isPolishingSoftSkills ? '⏳ Polishing...' : '✨ AI Polish'}</span>
+                    </button>
+                  </div>
                   <textarea
                     value={softSkills}
                     placeholder="Analytical Thinking, Clear Communication..."
@@ -525,6 +577,7 @@ export default function CVBuilderPage() {
                     className="w-full h-14 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 resize-none leading-relaxed placeholder-zinc-700"
                   />
                 </div>
+                {skillsError && <p className="text-[10px] text-rose-400 font-semibold">{skillsError}</p>}
               </div>
             </div>
 

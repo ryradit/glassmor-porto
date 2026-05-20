@@ -125,3 +125,30 @@ Instructions:
   );
   return extractText(data).trim();
 }
+
+export async function improveSkillsAction(skills: string, targetRole: string, type: 'hard' | 'soft'): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('API key not configured');
+
+  const prompt = `You are a professional resume writer and ATS optimization specialist.
+Improve the following comma-separated list of ${type} skills to make them highly professional, clean, standardized, and tailored to the target role of: "${targetRole}".
+
+Original ${type} Skills:
+"${skills}"
+
+Instructions:
+1. Standardize naming conventions (e.g., "reactjs" to "React", "communication" to "Effective Communication").
+2. Remove duplicates or generic, fluff entries.
+3. Organize them cleanly as a single comma-separated list.
+4. Keep it concise. Do not add explanations, parentheticals, or extra text.
+5. Return ONLY the polished comma-separated list. Do not include introductory notes, quotes, or markdown wrappers.`;
+
+  const data = await callGemini(
+    {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 256 },
+    },
+    apiKey
+  );
+  return extractText(data).trim();
+}
