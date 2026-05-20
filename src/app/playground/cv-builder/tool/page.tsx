@@ -1056,18 +1056,18 @@ export default function CVBuilderPage() {
                             <span className="text-zinc-600 font-medium not-italic">{edu.cityCountry}</span>
                           </div>
                           {edu.gpa && (
-                            <div className="text-sm text-zinc-700 pt-0.5">
-                              <strong className="text-zinc-950">GPA / Score:</strong> {edu.gpa}
+                            <div className="text-xs text-zinc-600 pt-0.5">
+                              <strong className="text-zinc-800">GPA / Score:</strong> {edu.gpa}
                             </div>
                           )}
                           {edu.awards && (
-                            <div className="text-sm text-zinc-700 pt-0.5">
-                              <strong className="text-zinc-950">Award:</strong> {edu.awards}
+                            <div className="text-xs text-zinc-600 pt-0.5">
+                              <strong className="text-zinc-800">Award:</strong> {edu.awards}
                             </div>
                           )}
                           {edu.thesis && (
-                            <div className="text-sm text-zinc-700 italic pt-0.5">
-                              <strong className="text-zinc-950">Thesis:</strong> {edu.thesis}
+                            <div className="text-xs text-zinc-600 italic pt-0.5">
+                              <strong className="text-zinc-800 not-italic">Thesis:</strong> {edu.thesis}
                             </div>
                           )}
                         </div>
