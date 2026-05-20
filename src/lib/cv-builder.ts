@@ -75,9 +75,16 @@ Instructions:
   return extractText(data).trim();
 }
 
-export async function improveExperienceAction(bullet: string, role: string): Promise<string> {
+export async function improveExperienceAction(bullet: string, role: string, mode: 'polish' | 'expand' | 'condense' = 'polish'): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('API key not configured');
+
+  let modeInstructions = "4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.";
+  if (mode === 'expand') {
+    modeInstructions = "4. Expand on the details. Extrapolate from the given information to generate exactly 1 or 2 MORE bullet points than originally provided to highlight implied skills for this role.";
+  } else if (mode === 'condense') {
+    modeInstructions = "4. Condense the details. Remove the least impactful bullet point or merge points to strictly reduce the total number of bullet points by at least 1.";
+  }
 
   const prompt = `You are a professional resume editor.
 Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}".
@@ -88,9 +95,9 @@ Original Responsibilities:
 Instructions:
 1. Use the STAR methodology (Situation, Task, Action, Result) where possible.
 2. Use strong action verbs (e.g., Designed, Spearheaded, Optimized).
-3. Do not invent details that are not there, but phrase them professionally and persuasively.
-4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.
-5. Ensure each point is compact, highly descriptive, and avoids excessively long, wordy sentences that drift off-topic.
+3. Do not invent completely unrelated details, but expand professionally on implied tasks.
+${modeInstructions}
+5. Ensure each point is highly descriptive and avoids excessively long, wordy sentences that drift off-topic.
 6. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
 
   const data = await callGemini(

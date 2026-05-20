@@ -185,19 +185,19 @@ export default function CVBuilderPage() {
     }
   };
 
-  const handlePolishExperience = async (index: number) => {
+  const handlePolishExperience = async (index: number, mode: 'polish' | 'expand' | 'condense' = 'polish') => {
     const bullets = experiences[index].bullets;
     if (!bullets.trim()) return;
     setPolishingIndex(index);
     setExperienceErrors(prev => ({ ...prev, [index]: '' }));
     try {
-      const result = await improveExperienceAction(bullets, experiences[index].role || title);
+      const result = await improveExperienceAction(bullets, experiences[index].role || title, mode);
       const newExps = [...experiences];
       newExps[index].bullets = result;
       setExperiences(newExps);
     } catch (err) {
       console.error(err);
-      setExperienceErrors(prev => ({ ...prev, [index]: 'Failed to polish experience. Verify API key.' }));
+      setExperienceErrors(prev => ({ ...prev, [index]: `Failed to ${mode} experience. Verify API key.` }));
     } finally {
       setPolishingIndex(null);
     }
@@ -480,13 +480,32 @@ export default function CVBuilderPage() {
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <label className="text-[8px] font-bold uppercase text-zinc-500">Responsibilities</label>
-                        <button
-                          onClick={() => handlePolishExperience(idx)}
-                          disabled={polishingIndex !== null || !exp.bullets.trim()}
-                          className="text-[8px] px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-400 font-bold uppercase rounded hover:bg-purple-500/20 transition-all disabled:opacity-50"
-                        >
-                          <span>{polishingIndex === idx ? '⏳ Polishing...' : '✨ AI Polish'}</span>
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handlePolishExperience(idx, 'polish')}
+                            disabled={polishingIndex !== null || !exp.bullets.trim()}
+                            className="text-[8px] px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-400 font-bold uppercase rounded hover:bg-purple-500/20 transition-all disabled:opacity-50"
+                            title="Rewrite and improve points"
+                          >
+                            <span>{polishingIndex === idx ? '⏳...' : '✨ Polish'}</span>
+                          </button>
+                          <button
+                            onClick={() => handlePolishExperience(idx, 'expand')}
+                            disabled={polishingIndex !== null || !exp.bullets.trim()}
+                            className="text-[8px] px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold uppercase rounded hover:bg-blue-500/20 transition-all disabled:opacity-50"
+                            title="Generate more bullet points"
+                          >
+                            <span>➕ Expand</span>
+                          </button>
+                          <button
+                            onClick={() => handlePolishExperience(idx, 'condense')}
+                            disabled={polishingIndex !== null || !exp.bullets.trim()}
+                            className="text-[8px] px-2 py-0.5 bg-pink-500/10 border border-pink-500/20 text-pink-400 font-bold uppercase rounded hover:bg-pink-500/20 transition-all disabled:opacity-50"
+                            title="Remove least impactful point"
+                          >
+                            <span>➖ Condense</span>
+                          </button>
+                        </div>
                       </div>
                       <textarea
                         value={exp.bullets}
