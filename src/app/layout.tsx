@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ryan Radityatama - AI & Software Engineer",
-  description: "AI & Software Engineer, Machine Learning Expert, and Full Stack Developer specializing in intelligent solutions that make technology more human-friendly.",
-  keywords: "Ryan Radityatama, AI Engineer, Software Engineer, Machine Learning, Full Stack Developer, Python, React, Next.js",
+  title: "Earth-X · Ryan's Playground AI Agent",
+  description: "Earth-X is Ryan Radityatama's personal AI playground — a creative sandbox for experimenting with cutting-edge AI, machine learning, computer vision, and full-stack engineering.",
+  keywords: "Earth-X, AI Playground, Ryan Radityatama, AI Engineer, Machine Learning, Full Stack Developer, Python, React, Next.js",
   authors: [{ name: "Ryan Radityatama" }],
   creator: "Ryan Radityatama",
 };
