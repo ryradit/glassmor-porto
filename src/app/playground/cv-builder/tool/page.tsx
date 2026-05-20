@@ -55,6 +55,20 @@ export default function CVBuilderPage() {
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: `${name || 'CV'}_Resume`,
+    pageStyle: `
+      @page {
+        size: A4;
+        margin: 18mm 16mm;
+      }
+      @page :first { margin-top: 18mm; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    `,
   });
 
   const handleLoadDemo = () => {
