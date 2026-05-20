@@ -54,7 +54,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     route: '/playground/cv-builder',
     color: 'from-orange-400 to-amber-500',
     emoji: '✍️',
-    comingSoon: true
+    comingSoon: false
   },
   {
     id: 'case-study',

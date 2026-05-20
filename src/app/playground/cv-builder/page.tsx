@@ -13,8 +13,8 @@ export default function CVBuilderLandingPage() {
         <Link href="/" className="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-300">
           ← Go away from this playground
         </Link>
-        <span className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-black rounded-full uppercase tracking-widest animate-pulse">
-          🚀 Coming Soon
+        <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-black rounded-full uppercase tracking-widest">
+          🧭 Gate Activated
         </span>
       </div>
 
@@ -112,13 +112,18 @@ export default function CVBuilderLandingPage() {
               </span>
             </label>
 
-            {/* Launch button (Locked as Coming Soon) */}
-            <button
-              disabled
-              className="w-full py-4 text-center font-bold text-xs tracking-widest uppercase rounded-xl transition-all duration-300 relative z-10 bg-zinc-800 text-zinc-500 border border-white/5 flex items-center justify-center space-x-2"
+            {/* Launch button */}
+            <Link
+              href={accepted ? "/playground/cv-builder/tool" : "#"}
+              onClick={(e) => { if (!accepted) e.preventDefault(); }}
+              className={`w-full py-4 text-center block font-bold text-xs tracking-widest uppercase rounded-xl transition-all duration-300 relative z-10 ${
+                accepted
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white shadow-lg shadow-purple-500/20'
+                  : 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-white/5'
+              }`}
             >
-              <span>🔒 Sandbox Coming Soon</span>
-            </button>
+              <span>Launch Sandbox Tool →</span>
+            </Link>
           </div>
         </div>
       </div>

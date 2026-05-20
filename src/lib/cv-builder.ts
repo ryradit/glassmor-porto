@@ -1,0 +1,107 @@
+'use server';
+
+import { callGemini, extractText } from '@/lib/gemini-client';
+
+export interface Experience {
+  company: string;
+  role: string;
+  period: string;
+  bullets: string;
+}
+
+export interface CVData {
+  name: string;
+  title: string;
+  email: string;
+  summary: string;
+  experiences: Experience[];
+}
+
+export async function improveSummaryAction(summary: string, targetRole: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('API key not configured');
+
+  const prompt = `You are a professional executive resume writer and career strategist.
+Rewrite and improve the following professional summary to make it highly impactful, concise, and optimized for ATS systems targeting the role of: "${targetRole}".
+
+Original Summary:
+"${summary}"
+
+Instructions:
+1. Focus on action verbs, clear outcomes, and technical expertise.
+2. Keep it to 2-3 sentences.
+3. Keep the tone premium, confident, and professional.
+4. Return ONLY the rewritten summary. Do not include introductory notes, quotes, or markdown wrappers.`;
+
+  const data = await callGemini(
+    {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 256 },
+    },
+    apiKey
+  );
+  return extractText(data).trim();
+}
+
+export async function improveExperienceAction(bullet: string, role: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('API key not configured');
+
+  const prompt = `You are a professional resume editor.
+Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}".
+
+Original Responsibilities:
+"${bullet}"
+
+Instructions:
+1. Use the STAR methodology (Situation, Task, Action, Result) where possible.
+2. Use strong action verbs (e.g., Designed, Spearheaded, Optimized).
+3. Do not invent details that are not there, but phrase them professionally and persuasively.
+4. Keep it concise, in a list of bullet points if appropriate, or as a tight cohesive paragraph depending on the inputs.
+5. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
+
+  const data = await callGemini(
+    {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 512 },
+    },
+    apiKey
+  );
+  return extractText(data).trim();
+}
+
+export async function generateCoverLetterAction(cv: CVData, targetCompany: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('API key not configured');
+
+  const experienceText = cv.experiences
+    .map(exp => `- ${exp.role} at ${exp.company} (${exp.period}): ${exp.bullets}`)
+    .join('\n');
+
+  const prompt = `You are a premium career strategist.
+Write a highly compelling, personalized cover letter for the candidate applying to "${targetCompany}" for the position of "${cv.title}".
+
+Candidate Information:
+Name: ${cv.name}
+Email: ${cv.email}
+Target Role: ${cv.title}
+Professional Summary: ${cv.summary}
+
+Work History:
+${experienceText}
+
+Instructions:
+1. Keep the cover letter modern, elegant, and punchy (around 3 paragraphs).
+2. Connect their specific background to the target company.
+3. Maintain a warm, premium, and professional tone.
+4. Return ONLY the body text of the cover letter. Do not add date, placeholders, addresses, or greeting/sign-off headers/footers (like [Your Name] or [Today's Date]) as these will be placed dynamically by the UI template.`;
+
+  const data = await callGemini(
+    {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+    },
+    apiKey
+  );
+  return extractText(data).trim();
+}
