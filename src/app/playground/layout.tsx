@@ -13,6 +13,8 @@ export default function PlaygroundLayout({
 }) {
   const pathname = usePathname();
   const isPathfinder = pathname.startsWith('/playground/career-pathfinder');
+  const isCvBuilderTool = pathname === '/playground/cv-builder/tool';
+  const hideLayoutShell = isPathfinder || isCvBuilderTool;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && pathname !== '/playground/career-pathfinder/chat') {
@@ -34,18 +36,18 @@ export default function PlaygroundLayout({
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0 opacity-40" />
 
       {/* Shared Header Navigation */}
-      {!isPathfinder && <Navigation />}
+      {!hideLayoutShell && <Navigation />}
 
       {/* Page Content Grid Wrapper */}
-      <main className={`relative z-10 ${isPathfinder ? 'pt-8' : 'pt-28'} pb-16 px-4 md:px-8 max-w-7xl mx-auto`}>
+      <main className={`relative z-10 ${hideLayoutShell ? 'pt-8' : 'pt-28'} pb-16 px-4 md:px-8 ${isCvBuilderTool ? 'max-w-[98%] w-full' : 'max-w-7xl mx-auto'}`}>
         {children}
       </main>
 
       {/* Shared Cybernetic Assistant */}
-      {!isPathfinder && <ChatBot />}
+      {!hideLayoutShell && <ChatBot />}
 
       {/* Shared Footer */}
-      {!isPathfinder && <Footer />}
+      {!hideLayoutShell && <Footer />}
     </div>
   );
 }

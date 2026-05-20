@@ -127,7 +127,7 @@ export default function CVBuilderPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-6xl mx-auto py-6 px-4">
+    <div className="space-y-8 animate-in fade-in duration-500 max-w-none w-full py-6 px-4">
       {/* Header Navigation */}
       <div className="flex justify-between items-center">
         <Link href="/playground/cv-builder" className="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center space-x-2">
