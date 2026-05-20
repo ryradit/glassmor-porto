@@ -24,6 +24,13 @@ export interface Language {
   proficiency: string;
 }
 
+export interface Certification {
+  name: string;
+  issuer: string;
+  date: string;
+  link?: string;
+}
+
 export interface CVData {
   name: string;
   title: string;
@@ -34,6 +41,7 @@ export interface CVData {
   hardSkills?: string;
   softSkills?: string;
   languages?: Language[];
+  certifications?: Certification[];
 }
 
 export async function improveSummaryAction(summary: string, targetRole: string): Promise<string> {

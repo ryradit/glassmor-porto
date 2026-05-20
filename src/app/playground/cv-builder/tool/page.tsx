@@ -10,7 +10,8 @@ import {
   Experience,
   CVData,
   Education,
-  Language
+  Language,
+  Certification
 } from '@/lib/cv-builder';
 import universities from '../../../../../universities.json';
 
@@ -25,6 +26,7 @@ export default function CVBuilderPage() {
   const [hardSkills, setHardSkills] = useState<string>('');
   const [softSkills, setSoftSkills] = useState<string>('');
   const [languages, setLanguages] = useState<Language[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
 
   const [template, setTemplate] = useState<'glass' | 'cyber' | 'minimal'>('glass');
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
@@ -84,12 +86,25 @@ export default function CVBuilderPage() {
       { name: 'English', proficiency: 'Professional Working Proficiency' },
       { name: 'Mandarin Chinese', proficiency: 'Basic' }
     ]);
+    setCertifications([
+      {
+        name: 'AWS Certified Solutions Architect – Associate',
+        issuer: 'Amazon Web Services',
+        date: '2024',
+        link: 'https://aws.amazon.com'
+      },
+      {
+        name: 'Professional Scrum Master I (PSM I)',
+        issuer: 'Scrum.org',
+        date: '2023'
+      }
+    ]);
   };
 
   const handleCopy = () => {
     setIsCopied(true);
     const content = activeTab === 'resume' 
-      ? JSON.stringify({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages }, null, 2)
+      ? JSON.stringify({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages, certifications }, null, 2)
       : coverLetter;
     navigator.clipboard.writeText(content);
     setTimeout(() => setIsCopied(false), 2000);
@@ -127,6 +142,17 @@ export default function CVBuilderPage() {
 
   const handleRemoveLanguage = (index: number) => {
     setLanguages(languages.filter((_, idx) => idx !== index));
+  };
+
+  const handleAddCertification = () => {
+    setCertifications([
+      ...certifications,
+      { name: '', issuer: '', date: '', link: '' }
+    ]);
+  };
+
+  const handleRemoveCertification = (index: number) => {
+    setCertifications(certifications.filter((_, idx) => idx !== index));
   };
 
   const handlePolishSummary = async () => {
@@ -672,6 +698,96 @@ export default function CVBuilderPage() {
               </div>
             </div>
 
+            {/* Certifications section */}
+            <div className="space-y-4 pt-3 border-t border-white/5 relative z-10">
+              <div className="flex justify-between items-center">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Certifications</label>
+                <button
+                  onClick={handleAddCertification}
+                  className="text-[9px] px-2.5 py-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-400 font-bold uppercase rounded-lg hover:bg-blue-500/25 transition-all"
+                >
+                  ➕ Add Cert
+                </button>
+              </div>
+
+              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+                {certifications.map((cert, idx) => (
+                  <div key={idx} className="p-3 bg-white/5 rounded-2xl border border-white/5 space-y-3 relative">
+                    <button
+                      onClick={() => handleRemoveCertification(idx)}
+                      className="absolute top-2 right-2 text-zinc-500 hover:text-rose-400 text-xs transition-colors p-1"
+                      title="Delete certification"
+                    >
+                      ✕
+                    </button>
+                    
+                    <div className="grid grid-cols-2 gap-2 pr-4">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Name</label>
+                        <input
+                          type="text"
+                          value={cert.name}
+                          placeholder="AWS Certified Solutions Architect"
+                          onChange={(e) => {
+                            const newCerts = [...certifications];
+                            newCerts[idx].name = e.target.value;
+                            setCertifications(newCerts);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Issuer</label>
+                        <input
+                          type="text"
+                          value={cert.issuer}
+                          placeholder="Amazon Web Services"
+                          onChange={(e) => {
+                            const newCerts = [...certifications];
+                            newCerts[idx].issuer = e.target.value;
+                            setCertifications(newCerts);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Date</label>
+                        <input
+                          type="text"
+                          value={cert.date}
+                          placeholder="2023"
+                          onChange={(e) => {
+                            const newCerts = [...certifications];
+                            newCerts[idx].date = e.target.value;
+                            setCertifications(newCerts);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Link (Optional)</label>
+                        <input
+                          type="text"
+                          value={cert.link || ''}
+                          placeholder="https://credential.net/..."
+                          onChange={(e) => {
+                            const newCerts = [...certifications];
+                            newCerts[idx].link = e.target.value;
+                            setCertifications(newCerts);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+
             {/* Cover Letter generation quick tool */}
             <div className="space-y-2.5 pt-3 border-t border-white/5 relative z-10">
               <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Generate Cover Letter</label>
@@ -927,6 +1043,41 @@ export default function CVBuilderPage() {
                         <div key={idx} className="text-xs font-semibold flex items-center space-x-1.5">
                           <span className={template === 'minimal' ? 'text-zinc-900' : 'text-white'}>{lang.name || 'Language'}</span>
                           <span className="text-[9px] text-zinc-400 font-normal">({lang.proficiency})</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Certifications section */}
+                {certifications.length > 0 && (
+                  <div className="space-y-4">
+                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
+                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
+                    }`}>Certifications</h4>
+                    
+                    <div className="space-y-3">
+                      {certifications.map((cert, idx) => (
+                        <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
+                          <div className="space-y-0.5">
+                            <h5 className={`text-xs font-black ${
+                              template === 'minimal' ? 'text-zinc-900' : 'text-white'
+                            }`}>
+                              {cert.link ? (
+                                <a href={cert.link} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-400">
+                                  {cert.name || 'Certification Name'}
+                                </a>
+                              ) : (
+                                <span>{cert.name || 'Certification Name'}</span>
+                              )}
+                            </h5>
+                            <div className="text-[10px] font-semibold opacity-90 text-zinc-400">
+                              {cert.issuer || 'Issuing Organization'}
+                            </div>
+                          </div>
+                          <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">
+                            {cert.date || 'Date'}
+                          </span>
                         </div>
                       ))}
                     </div>
