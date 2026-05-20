@@ -13,8 +13,8 @@ export const exportToDocx = async (data: CVData) => {
     }),
     new Paragraph({
       children: [
-        new TextRun({ text: data.title, bold: true, color: "555555" }),
-        new TextRun({ text: ` | ${data.email}`, color: "555555" }),
+        new TextRun({ text: data.title, bold: true }),
+        new TextRun({ text: ` | ${data.email}` }),
       ],
       spacing: { after: 200 },
     })
@@ -27,7 +27,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Professional Summary",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       }),
       new Paragraph({
         text: data.summary,
@@ -43,7 +43,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Experience",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       })
     );
 
@@ -58,8 +58,8 @@ export const exportToDocx = async (data: CVData) => {
         }),
         new Paragraph({
           children: [
-            new TextRun({ text: exp.period, italics: true, color: "777777" }),
-            new TextRun({ text: exp.type ? ` (${exp.type})` : '', italics: true, color: "777777" }),
+            new TextRun({ text: exp.period, italics: true }),
+            new TextRun({ text: exp.type ? ` (${exp.type})` : '', italics: true }),
           ],
           spacing: { after: 100 },
         })
@@ -86,7 +86,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Education",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 400, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       })
     );
 
@@ -106,8 +106,8 @@ export const exportToDocx = async (data: CVData) => {
         }),
         new Paragraph({
           children: [
-            new TextRun({ text: edu.period, color: "777777" }),
-            new TextRun({ text: edu.gpa ? ` | GPA: ${edu.gpa}` : '', color: "777777" }),
+            new TextRun({ text: edu.period }),
+            new TextRun({ text: edu.gpa ? ` | GPA: ${edu.gpa}` : '' }),
           ],
           spacing: { after: 100 },
         })
@@ -129,7 +129,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Skills",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 400, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       })
     );
 
@@ -158,7 +158,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Certifications",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 400, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       })
     );
 
@@ -167,13 +167,13 @@ export const exportToDocx = async (data: CVData) => {
         new Paragraph({
           children: [
             new TextRun({ text: cert.name, bold: true }),
-            new TextRun({ text: ` (${cert.date})`, color: "777777" }),
+            new TextRun({ text: ` (${cert.date})` }),
           ],
         }),
         new Paragraph({
           children: [
             new TextRun({ text: cert.issuer }),
-            new TextRun({ text: cert.link ? ` - ${cert.link}` : '', color: "555555", italics: true }),
+            new TextRun({ text: cert.link ? ` - ${cert.link}` : '', italics: true }),
           ],
           spacing: { after: 100 },
         })
@@ -188,7 +188,7 @@ export const exportToDocx = async (data: CVData) => {
         text: "Languages",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 400, after: 100 },
-        border: { bottom: { color: "cccccc", space: 1, style: BorderStyle.SINGLE, size: 6 } },
+        border: { bottom: { color: "000000", space: 1, style: BorderStyle.SINGLE, size: 6 } },
       })
     );
 

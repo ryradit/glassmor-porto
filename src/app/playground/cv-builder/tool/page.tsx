@@ -29,8 +29,6 @@ export default function CVBuilderPage() {
   const [softSkills, setSoftSkills] = useState<string>('');
   const [languages, setLanguages] = useState<Language[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
-
-  const [template, setTemplate] = useState<'glass' | 'cyber' | 'minimal'>('glass');
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
   
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -877,25 +875,6 @@ export default function CVBuilderPage() {
 
             {/* Template controls */}
             <div className="flex items-center gap-3">
-              <div className="flex gap-1">
-                {[
-                  { id: 'glass', label: 'Glass' },
-                  { id: 'cyber', label: 'Cyber' },
-                  { id: 'minimal', label: 'Minimal' }
-                ].map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => setTemplate(item.id as 'glass' | 'cyber' | 'minimal')}
-                    className={`px-2.5 py-1 text-[9px] font-black uppercase rounded-lg transition-all duration-300 border ${
-                      template === item.id 
-                        ? 'bg-white/10 text-white border-white/20' 
-                        : 'text-gray-400 hover:text-white border-transparent'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
 
               <button
                 onClick={() => handlePrint()}
@@ -921,67 +900,47 @@ export default function CVBuilderPage() {
           </div>
 
           {/* Dynamic document sheets wrapper */}
-          <div ref={componentRef} className={`print:w-full print:m-0 print:p-8 print:shadow-none p-8 rounded-3xl border shadow-2xl relative transition-all duration-500 min-h-[600px] overflow-hidden ${
-            template === 'glass'
-              ? 'glass-card border-purple-500/10 text-gray-200 shadow-purple-950/5 print:bg-white print:text-black print:border-none'
-              : template === 'cyber'
-              ? 'bg-[#030108] border-[#29173d] text-cyan-300 shadow-2xl font-mono print:bg-white print:text-black print:border-none'
-              : 'bg-white border-zinc-200 text-zinc-800 font-sans shadow-lg print:border-none'
-          }`}>
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none rounded-3xl" />
-            
+          <div ref={componentRef} className="print:w-full print:m-0 print:p-8 print:shadow-none p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
             {activeTab === 'resume' ? (
               <div className="space-y-6 relative z-10">
                 {/* Header branding */}
-                <div className="border-b border-purple-500/10 pb-4">
-                  <h2 className={`text-2xl font-black tracking-tight ${
-                    template === 'minimal' ? 'text-zinc-900' : 'text-white'
-                  }`}>{name || 'John Doe'}</h2>
-                  <div className="flex justify-between items-center mt-1.5 flex-wrap gap-2 text-xs font-semibold">
-                    <span className={`${
-                      template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-pink-400 uppercase tracking-widest' : 'text-purple-600'
-                    }`}>{title || 'Engineer Track'}</span>
-                    <span className="text-[10px] text-zinc-400 font-medium font-mono">{email}</span>
+                <div className="border-b-2 border-zinc-950 pb-4">
+                  <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name || 'John Doe'}</h2>
+                  <div className="flex justify-between items-center mt-2 flex-wrap gap-2 text-sm font-bold">
+                    <span className="text-zinc-900">{title || 'Engineer Track'}</span>
+                    <span className="text-zinc-600 font-medium">{email}</span>
                   </div>
                 </div>
 
                 {/* Summary details */}
                 <div className="space-y-2">
-                  <h4 className={`text-[10px] font-black uppercase tracking-widest ${
-                    template === 'minimal' ? 'text-zinc-900' : 'text-zinc-400'
-                  }`}>Professional Summary</h4>
-                  <p className="text-xs leading-relaxed font-medium opacity-90">{summary || 'Enter summary details...'}</p>
+                  <h4 className="text-xs font-black uppercase tracking-widest text-zinc-950">Professional Summary</h4>
+                  <p className="text-sm leading-relaxed text-zinc-800">{summary || 'Enter summary details...'}</p>
                 </div>
 
                 {/* Experience details */}
                 <div className="space-y-4">
-                  <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                    template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
-                  }`}>Professional Experience</h4>
+                  <h4 className="text-xs font-black uppercase tracking-widest border-t border-zinc-200 pt-4 text-zinc-950">Professional Experience</h4>
                   
                   {experiences.length === 0 ? (
-                    <p className="text-xs text-zinc-500 italic">No experiences added. Use the left panel to configure work blocks.</p>
+                    <p className="text-sm text-zinc-500 italic">No experiences added. Use the left panel to configure work blocks.</p>
                   ) : (
                     <div className="space-y-5">
                       {experiences.map((exp, i) => (
-                        <div key={i} className="space-y-1 relative pl-4 border-l border-purple-500/20">
+                        <div key={i} className="space-y-1 relative">
                           <div className="flex justify-between items-center flex-wrap gap-1.5">
-                            <h5 className={`text-xs font-black ${
-                              template === 'minimal' ? 'text-zinc-900' : 'text-white'
-                            }`}>{exp.company || 'Company Name'}</h5>
-                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">{exp.period || 'Period'}</span>
+                            <h5 className="text-sm font-black text-zinc-950">{exp.company || 'Company Name'}</h5>
+                            <span className="text-xs text-zinc-600 font-semibold">{exp.period || 'Period'}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span className={`text-[10px] font-bold ${
-                              template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-cyan-400' : 'text-purple-600'
-                            }`}>{exp.role || 'Role Title'}</span>
+                            <span className="text-sm font-bold text-zinc-800 italic">{exp.role || 'Role Title'}</span>
                             {exp.type && (
-                              <span className="text-[8px] px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-zinc-400 font-bold uppercase">
+                              <span className="text-[10px] px-1.5 py-0.5 bg-zinc-100 border border-zinc-200 rounded text-zinc-700 font-bold uppercase">
                                 {exp.type}
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] leading-relaxed font-medium opacity-80 pt-1.5 whitespace-pre-line">
+                          <p className="text-sm leading-relaxed text-zinc-700 pt-1.5 whitespace-pre-line">
                             {exp.bullets || 'Describe your daily workflow achievements...'}
                           </p>
                         </div>
@@ -992,41 +951,35 @@ export default function CVBuilderPage() {
 
                 {/* Education section */}
                 <div className="space-y-4">
-                  <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                    template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
-                  }`}>Education</h4>
+                  <h4 className="text-xs font-black uppercase tracking-widest border-t border-zinc-200 pt-4 text-zinc-950">Education</h4>
                   
                   {education.length === 0 ? (
-                    <p className="text-xs text-zinc-500 italic">No education added.</p>
+                    <p className="text-sm text-zinc-500 italic">No education added.</p>
                   ) : (
                     <div className="space-y-5">
                       {education.map((edu, i) => (
-                        <div key={i} className="space-y-1 relative pl-4 border-l border-purple-500/20">
+                        <div key={i} className="space-y-1 relative">
                           <div className="flex justify-between items-center flex-wrap gap-1.5">
-                            <h5 className={`text-xs font-black ${
-                              template === 'minimal' ? 'text-zinc-900' : 'text-white'
-                            }`}>{edu.institution || 'Institution Name'}</h5>
-                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">{edu.period || 'Period'}</span>
+                            <h5 className="text-sm font-black text-zinc-950">{edu.institution || 'Institution Name'}</h5>
+                            <span className="text-xs text-zinc-600 font-semibold">{edu.period || 'Period'}</span>
                           </div>
-                          <div className="flex justify-between text-[10px] font-semibold opacity-90 flex-wrap">
-                            <span className={template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-cyan-400' : 'text-purple-600'}>
-                              {edu.degree || 'Degree Major'}
-                            </span>
-                            <span className="text-zinc-400 font-mono text-[9px]">{edu.cityCountry}</span>
+                          <div className="flex justify-between text-sm font-bold text-zinc-800 italic flex-wrap">
+                            <span>{edu.degree || 'Degree Major'}</span>
+                            <span className="text-zinc-600 font-medium not-italic">{edu.cityCountry}</span>
                           </div>
                           {edu.gpa && (
-                            <div className="text-[10px] text-zinc-400 pt-0.5">
-                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>GPA / Score:</strong> {edu.gpa}
+                            <div className="text-sm text-zinc-700 pt-0.5">
+                              <strong className="text-zinc-950">GPA / Score:</strong> {edu.gpa}
                             </div>
                           )}
                           {edu.awards && (
-                            <div className="text-[10px] text-zinc-400 pt-0.5">
-                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>Award:</strong> {edu.awards}
+                            <div className="text-sm text-zinc-700 pt-0.5">
+                              <strong className="text-zinc-950">Award:</strong> {edu.awards}
                             </div>
                           )}
                           {edu.thesis && (
-                            <div className="text-[10px] text-zinc-400 italic pt-0.5">
-                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>Thesis:</strong> {edu.thesis}
+                            <div className="text-sm text-zinc-700 italic pt-0.5">
+                              <strong className="text-zinc-950">Thesis:</strong> {edu.thesis}
                             </div>
                           )}
                         </div>
@@ -1038,41 +991,23 @@ export default function CVBuilderPage() {
                 {/* Skills section */}
                 {(hardSkills || softSkills) && (
                   <div className="space-y-4">
-                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
-                    }`}>Skills Directory</h4>
+                    <h4 className="text-xs font-black uppercase tracking-widest border-t border-zinc-200 pt-4 text-zinc-950">Skills Directory</h4>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       {hardSkills && (
                         <div className="space-y-1">
-                          <div className={`font-bold ${template === 'minimal' ? 'text-zinc-950' : 'text-white'}`}>Technical Skills</div>
-                          <div className="flex flex-wrap gap-1 pt-1">
-                            {hardSkills.split(',').map((skill, index) => {
-                              const trimmed = skill.trim();
-                              if (!trimmed) return null;
-                              return (
-                                <span key={index} className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[10px] font-medium text-zinc-300">
-                                  {trimmed}
-                                </span>
-                              );
-                            })}
+                          <div className="font-bold text-zinc-950">Technical Skills</div>
+                          <div className="pt-1 text-zinc-800 leading-relaxed">
+                            {hardSkills}
                           </div>
                         </div>
                       )}
                       
                       {softSkills && (
                         <div className="space-y-1">
-                          <div className={`font-bold ${template === 'minimal' ? 'text-zinc-950' : 'text-white'}`}>Soft Skills</div>
-                          <div className="flex flex-wrap gap-1 pt-1">
-                            {softSkills.split(',').map((skill, index) => {
-                              const trimmed = skill.trim();
-                              if (!trimmed) return null;
-                              return (
-                                <span key={index} className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[10px] font-medium text-zinc-300">
-                                  {trimmed}
-                                </span>
-                              );
-                            })}
+                          <div className="font-bold text-zinc-950">Soft Skills</div>
+                          <div className="pt-1 text-zinc-800 leading-relaxed">
+                            {softSkills}
                           </div>
                         </div>
                       )}
@@ -1083,15 +1018,13 @@ export default function CVBuilderPage() {
                 {/* Languages section */}
                 {languages.length > 0 && (
                   <div className="space-y-4">
-                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
-                    }`}>Languages</h4>
+                    <h4 className="text-xs font-black uppercase tracking-widest border-t border-zinc-200 pt-4 text-zinc-950">Languages</h4>
                     
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-4">
                       {languages.map((lang, idx) => (
-                        <div key={idx} className="text-xs font-semibold flex items-center space-x-1.5">
-                          <span className={template === 'minimal' ? 'text-zinc-900' : 'text-white'}>{lang.name || 'Language'}</span>
-                          <span className="text-[9px] text-zinc-400 font-normal">({lang.proficiency})</span>
+                        <div key={idx} className="text-sm font-semibold flex items-center space-x-1.5">
+                          <span className="text-zinc-950">{lang.name || 'Language'}</span>
+                          <span className="text-zinc-600 font-normal">({lang.proficiency})</span>
                         </div>
                       ))}
                     </div>
@@ -1101,30 +1034,26 @@ export default function CVBuilderPage() {
                 {/* Certifications section */}
                 {certifications.length > 0 && (
                   <div className="space-y-4">
-                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
-                    }`}>Certifications</h4>
+                    <h4 className="text-xs font-black uppercase tracking-widest border-t border-zinc-200 pt-4 text-zinc-950">Certifications</h4>
                     
                     <div className="space-y-3">
                       {certifications.map((cert, idx) => (
                         <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
                           <div className="space-y-0.5">
-                            <h5 className={`text-xs font-black ${
-                              template === 'minimal' ? 'text-zinc-900' : 'text-white'
-                            }`}>
+                            <h5 className="text-sm font-black text-zinc-950">
                               {cert.link ? (
-                                <a href={cert.link} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-400">
+                                <a href={cert.link} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-600">
                                   {cert.name || 'Certification Name'}
                                 </a>
                               ) : (
                                 <span>{cert.name || 'Certification Name'}</span>
                               )}
                             </h5>
-                            <div className="text-[10px] font-semibold opacity-90 text-zinc-400">
+                            <div className="text-xs font-semibold text-zinc-600">
                               {cert.issuer || 'Issuing Organization'}
                             </div>
                           </div>
-                          <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">
+                          <span className="text-xs text-zinc-600 font-bold uppercase tracking-wider">
                             {cert.date || 'Date'}
                           </span>
                         </div>
@@ -1136,24 +1065,20 @@ export default function CVBuilderPage() {
             ) : (
               <div className="space-y-6 relative z-10">
                 {/* Header branding for cover letter */}
-                <div className="border-b border-purple-500/10 pb-4">
-                  <h2 className={`text-2xl font-black tracking-tight ${
-                    template === 'minimal' ? 'text-zinc-900' : 'text-white'
-                  }`}>{name}</h2>
-                  <div className="flex justify-between items-center mt-1.5 flex-wrap gap-2 text-xs font-semibold">
-                    <span className="text-zinc-400 font-medium font-mono">{email}</span>
-                    <span className={`text-[10px] font-black uppercase tracking-widest ${
-                      template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-pink-400' : 'text-purple-600'
-                    }`}>Cover Letter for {targetCompany}</span>
+                <div className="border-b-2 border-zinc-950 pb-4">
+                  <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name}</h2>
+                  <div className="flex justify-between items-center mt-2 flex-wrap gap-2 text-sm font-bold">
+                    <span className="text-zinc-600 font-medium">{email}</span>
+                    <span className="text-xs font-black uppercase tracking-widest text-zinc-950">Cover Letter for {targetCompany}</span>
                   </div>
                 </div>
 
                 {/* Cover letter content */}
-                <div className="space-y-5 text-xs leading-relaxed font-medium opacity-90 whitespace-pre-line">
+                <div className="space-y-5 text-sm leading-relaxed text-zinc-800 whitespace-pre-line">
                   <p>Dear Hiring Team at {targetCompany},</p>
                   {coverLetter}
                   <p className="pt-4">Sincerely,</p>
-                  <p className="font-bold">{name}</p>
+                  <p className="font-bold text-zinc-950">{name}</p>
                 </div>
               </div>
             )}
