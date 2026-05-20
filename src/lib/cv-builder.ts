@@ -79,6 +79,30 @@ export async function improveExperienceAction(bullet: string, role: string, comp
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('API key not configured');
 
+  // Expand: ask AI for only the ONE new bullet, then append it in code.
+  // This avoids Gemini's loop detection which triggers when AI is asked to repeat input verbatim.
+  if (mode === 'expand') {
+    const expandPrompt = `You are a professional resume editor.
+Based on the following job responsibilities for a "${role}" at "${company}", write exactly ONE new additional bullet point that would complement this list.
+
+Existing Responsibilities (for context only, do NOT repeat them):
+"${bullet}"
+
+Instructions:
+1. Output ONLY the single new bullet point text — no list markers, no numbering, no intro text.
+2. It must be a complete, professional sentence (minimum 10 words) using strong action verbs.
+3. It should highlight an implied skill or responsibility relevant to the role that is not already covered above.
+4. Use the STAR methodology (Situation, Task, Action, Result) where possible.`;
+
+    const data = await callGemini(
+      { contents: [{ parts: [{ text: expandPrompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 256 } },
+      apiKey
+    );
+    const newBullet = extractText(data).trim().replace(/^[-*•]\s*/, '');
+    // Append the new point to the existing bullets
+    return `${bullet.trimEnd()}\n${newBullet}`;
+  }
+
   let prompt = `You are a professional resume editor.
 Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}" at "${company}".
 
@@ -93,21 +117,7 @@ Instructions:
 5. Ensure each point is highly descriptive and avoids excessively long, wordy sentences that drift off-topic.
 6. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
 
-  if (mode === 'expand') {
-    prompt = `You are a professional resume editor.
-Your task is to ADD EXACTLY ONE NEW bullet point to the following job responsibilities. 
-DO NOT modify, edit, or remove ANY of the original bullet points. Keep them exactly as they are.
-Simply append one new highly professional bullet point that highlights implied skills for the target role of "${role}" at "${company}".
-
-Original Responsibilities:
-"${bullet}"
-
-Instructions:
-1. The output MUST contain all the original points EXACTLY as they are written above.
-2. Add exactly one new bullet point at the end.
-3. The new point MUST start on a new line and be a complete, professional sentence (minimum 10 words, not just a single word or short phrase). It must use strong action verbs and the STAR methodology where possible.
-4. Return ONLY the final text. Do not include introductory notes, quotes, or markdown wrappers.`;
-  } else if (mode === 'condense') {
+  if (mode === 'condense') {
     prompt = `You are a professional resume editor.
 Your task is to CONDENSE the following job responsibilities for the target role of "${role}" at "${company}".
 
