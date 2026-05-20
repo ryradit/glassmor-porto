@@ -34,7 +34,7 @@ export default function CVBuilderPage() {
   const [languages, setLanguages] = useState<Language[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
-  const [cvLayout, setCvLayout] = useState<'standard' | 'ats' | 'modern' | 'compact'>('standard');
+  const [cvLayout, setCvLayout] = useState<'standard' | 'ats' | 'modern' | 'two-column'>('standard');
   
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isPolishingSummary, setIsPolishingSummary] = useState<boolean>(false);
@@ -1007,11 +1007,11 @@ export default function CVBuilderPage() {
                   }`}
                 >Modern</button>
                 <button
-                  onClick={() => setCvLayout('compact')}
+                  onClick={() => setCvLayout('two-column')}
                   className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded transition-all ${
-                    cvLayout === 'compact' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
+                    cvLayout === 'two-column' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
                   }`}
-                >Compact</button>
+                >Two-Column</button>
               </div>
             )}
           </div>
@@ -1027,9 +1027,10 @@ export default function CVBuilderPage() {
             }
           `}</style>
 
-          {/* Dynamic document sheets wrapper */}
-          <div ref={componentRef} data-print-cv className="print:w-full print:m-0 print:p-0 print:shadow-none print:border-0 print:rounded-none print:overflow-visible p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
-            {activeTab === 'resume' ? (
+          {/* Dynamic document sheets wrapper (A4 preview sized) */}
+          <div className="flex justify-center w-full overflow-x-auto bg-zinc-950/20 p-4 rounded-xl">
+            <div ref={componentRef} data-print-cv className="w-[210mm] min-h-[297mm] print:w-full print:m-0 print:p-0 print:shadow-none print:border-0 print:rounded-none print:overflow-visible p-10 bg-white text-zinc-950 font-sans shadow-xl border border-zinc-200">
+              {activeTab === 'resume' ? (
               cvLayout === 'ats' ? (
                 /* ─── ATS Layout ─── */
                 <div className="space-y-3 text-zinc-950 font-sans">
@@ -1283,123 +1284,138 @@ export default function CVBuilderPage() {
                     )}
                   </div>
                 </div>
-              ) : cvLayout === 'compact' ? (
-                /* ─── Compact Layout ─── */
-                <div className="space-y-2 text-zinc-900 font-serif">
-                  {/* Compact Header */}
-                  <div className="text-center pb-2 border-b-2 border-zinc-800">
-                    <h2 className="text-2xl font-black tracking-tight text-zinc-950 uppercase">{name || 'John Doe'}</h2>
-                    <p className="text-xs font-bold text-zinc-800 mt-0.5 tracking-widest uppercase">{title || 'Engineer Track'}</p>
-                    <p className="text-[10px] text-zinc-600 mt-1">
-                      {[email, phone, location, linkedin, portfolio].filter(Boolean).join('  |  ')}
-                    </p>
-                  </div>
-
-                  {/* Compact Summary */}
-                  {summary && (
-                    <p className="text-[11px] leading-tight text-zinc-800 text-justify border-b border-zinc-200 pb-2">{summary}</p>
-                  )}
-
-                  {/* Compact Experience */}
-                  {experiences.length > 0 && (
+              ) : cvLayout === 'two-column' ? (
+                /* ─── Two-Column Layout ─── */
+                <div className="flex flex-col sm:flex-row gap-8 text-zinc-900 font-sans h-full">
+                  {/* Left Column (1/3) */}
+                  <div className="w-full sm:w-[32%] space-y-6 flex flex-col">
+                    {/* Header Left */}
                     <div>
-                      <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Experience</h3>
-                      <div className="space-y-2 mt-1.5">
-                        {experiences.map((exp, i) => (
-                          <div key={i} className="print:break-inside-avoid">
-                            <div className="flex justify-between items-baseline">
-                              <p className="text-[11px]">
-                                <span className="font-bold text-zinc-950">{exp.company || 'Company Name'}</span>
-                                <span className="text-zinc-600 mx-1">|</span>
-                                <span className="italic text-zinc-800">{exp.role || 'Role Title'}</span>
-                                {exp.type && <span className="text-zinc-500 text-[9px] ml-1">({exp.type})</span>}
-                              </p>
-                              <span className="text-[10px] text-zinc-600 font-semibold">{exp.period || 'Period'}</span>
-                            </div>
-                            {exp.bullets && (
-                              <div className="mt-0.5 pl-3">
-                                {exp.bullets.split('\n').map((b, bi) => {
-                                  const clean = b.trim().replace(/^[-*•]\s*/, '');
-                                  if (!clean) return null;
-                                  return (
-                                    <div key={bi} className="flex gap-1.5 text-[10.5px] leading-tight text-zinc-800 mb-0.5">
-                                      <span>•</span>
-                                      <p>{clean}</p>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                      <h2 className="text-3xl font-black tracking-tight text-zinc-950 uppercase leading-none">{name || 'John Doe'}</h2>
+                      <p className="text-sm font-bold text-zinc-500 mt-2 uppercase tracking-widest">{title || 'Engineer Track'}</p>
                     </div>
-                  )}
 
-                  {/* Compact Education */}
-                  {education.length > 0 && (
-                    <div className="mt-2">
-                      <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Education</h3>
-                      <div className="space-y-1.5 mt-1.5">
-                        {education.map((edu, i) => (
-                          <div key={i} className="print:break-inside-avoid text-[11px]">
-                            <div className="flex justify-between items-baseline">
-                              <p>
-                                <span className="font-bold text-zinc-950">{edu.institution || 'Institution'}</span>
-                                {edu.cityCountry && <span className="text-zinc-600">, {edu.cityCountry}</span>}
-                              </p>
-                              <span className="text-[10px] text-zinc-600 font-semibold">{edu.period}</span>
-                            </div>
-                            <p className="italic text-zinc-800">{edu.degree}</p>
-                            {(edu.gpa || edu.awards || edu.thesis) && (
-                              <p className="text-[10px] text-zinc-600 mt-0.5">
-                                {[
-                                  edu.gpa && `GPA: ${edu.gpa}`,
-                                  edu.awards && `Award: ${edu.awards}`,
-                                  edu.thesis && `Thesis: ${edu.thesis}`
-                                ].filter(Boolean).join('  |  ')}
-                              </p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                    {/* Contact */}
+                    <div className="space-y-1.5 text-xs text-zinc-600 mt-4">
+                      {email && <p className="flex items-center gap-2"><span className="w-4 text-center">✉️</span> {email}</p>}
+                      {phone && <p className="flex items-center gap-2"><span className="w-4 text-center">📱</span> {phone}</p>}
+                      {location && <p className="flex items-center gap-2"><span className="w-4 text-center">📍</span> {location}</p>}
+                      {linkedin && <p className="flex items-center gap-2"><span className="w-4 text-center">💼</span> {linkedin}</p>}
+                      {portfolio && <p className="flex items-center gap-2"><span className="w-4 text-center">🌐</span> {portfolio}</p>}
                     </div>
-                  )}
 
-                  <div className="grid grid-cols-2 gap-4 mt-2">
-                    {/* Compact Skills */}
+                    {/* Skills */}
                     {(hardSkills || softSkills) && (
-                      <div>
-                        <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Skills</h3>
-                        <div className="mt-1 text-[10.5px] leading-tight text-zinc-800">
-                          {hardSkills && <p><span className="font-bold">Tech:</span> {hardSkills}</p>}
-                          {softSkills && <p className="mt-0.5"><span className="font-bold">Soft:</span> {softSkills}</p>}
+                      <div className="pt-4 border-t border-zinc-200">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-3">Skills</h3>
+                        <div className="space-y-3 text-xs leading-relaxed text-zinc-700">
+                          {hardSkills && <div><span className="font-bold text-zinc-900 block mb-0.5">Technical</span>{hardSkills.split(',').map(s => s.trim()).join(' • ')}</div>}
+                          {softSkills && <div><span className="font-bold text-zinc-900 block mb-0.5">Professional</span>{softSkills.split(',').map(s => s.trim()).join(' • ')}</div>}
                         </div>
                       </div>
                     )}
 
-                    {/* Compact Langs & Certs */}
-                    {(languages.length > 0 || certifications.length > 0) && (
-                      <div>
-                        {languages.length > 0 && (
-                          <div className="mb-2">
-                            <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Languages</h3>
-                            <p className="text-[10.5px] text-zinc-800 mt-1">{languages.map(l => `${l.name} (${l.proficiency})`).join(', ')}</p>
-                          </div>
-                        )}
-                        {certifications.length > 0 && (
-                          <div>
-                            <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Certifications</h3>
-                            <div className="mt-1 space-y-0.5">
-                              {certifications.map((cert, idx) => (
-                                <p key={idx} className="text-[10.5px] text-zinc-800 print:break-inside-avoid">
-                                  <span className="font-bold">{cert.name}</span>
-                                  <span className="text-zinc-600"> — {cert.issuer} {cert.date && `(${cert.date})`}</span>
-                                </p>
-                              ))}
+                    {/* Languages */}
+                    {languages.length > 0 && (
+                      <div className="pt-4 border-t border-zinc-200">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-3">Languages</h3>
+                        <div className="space-y-2 text-xs">
+                          {languages.map((l, i) => (
+                            <div key={i} className="flex justify-between items-baseline">
+                              <span className="font-bold text-zinc-800">{l.name}</span>
+                              <span className="text-zinc-500">{l.proficiency}</span>
                             </div>
-                          </div>
-                        )}
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Column (2/3) */}
+                  <div className="w-full sm:w-[68%] space-y-6">
+                    {/* Summary */}
+                    {summary && (
+                      <div className="pt-1">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-2 pb-1 border-b-2 border-zinc-950 inline-block">Profile</h3>
+                        <p className="text-sm leading-relaxed text-zinc-700">{summary}</p>
+                      </div>
+                    )}
+
+                    {/* Experience */}
+                    {experiences.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-4 pb-1 border-b-2 border-zinc-950 inline-block w-full">Experience</h3>
+                        <div className="space-y-5">
+                          {experiences.map((exp, i) => (
+                            <div key={i} className="print:break-inside-avoid">
+                              <div className="flex justify-between items-baseline mb-0.5">
+                                <h4 className="text-sm font-bold text-zinc-900">{exp.role || 'Role Title'}</h4>
+                                <span className="text-xs font-bold text-zinc-500 shrink-0">{exp.period || 'Period'}</span>
+                              </div>
+                              <p className="text-xs font-semibold text-zinc-800 mb-2 uppercase tracking-wide">
+                                {exp.company || 'Company Name'} {exp.type && <span className="text-zinc-400 normal-case tracking-normal">({exp.type})</span>}
+                              </p>
+                              {exp.bullets && (
+                                <div className="space-y-1 pl-3 border-l border-zinc-200">
+                                  {exp.bullets.split('\n').map((b, bi) => {
+                                    const clean = b.trim().replace(/^[-*•]\s*/, '');
+                                    if (!clean) return null;
+                                    return (
+                                      <p key={bi} className="text-xs leading-relaxed text-zinc-700 relative before:content-['•'] before:absolute before:-left-3 before:text-zinc-300">
+                                        {clean}
+                                      </p>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Education */}
+                    {education.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-4 pb-1 border-b-2 border-zinc-950 inline-block w-full">Education</h3>
+                        <div className="space-y-4">
+                          {education.map((edu, i) => (
+                            <div key={i} className="print:break-inside-avoid">
+                              <div className="flex justify-between items-baseline mb-0.5">
+                                <h4 className="text-sm font-bold text-zinc-900">{edu.degree}</h4>
+                                <span className="text-xs font-bold text-zinc-500 shrink-0">{edu.period}</span>
+                              </div>
+                              <p className="text-xs font-semibold text-zinc-800 mb-1">
+                                {edu.institution} {edu.cityCountry && <span className="text-zinc-500 font-normal">, {edu.cityCountry}</span>}
+                              </p>
+                              {(edu.gpa || edu.awards || edu.thesis) && (
+                                <div className="text-xs text-zinc-600 space-y-0.5">
+                                  {edu.gpa && <p><span className="font-semibold text-zinc-700">GPA:</span> {edu.gpa}</p>}
+                                  {edu.awards && <p><span className="font-semibold text-zinc-700">Award:</span> {edu.awards}</p>}
+                                  {edu.thesis && <p className="italic"><span className="not-italic font-semibold text-zinc-700">Thesis:</span> {edu.thesis}</p>}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Certifications */}
+                    {certifications.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-zinc-950 mb-3 pb-1 border-b-2 border-zinc-950 inline-block w-full">Certifications</h3>
+                        <div className="space-y-2.5">
+                          {certifications.map((cert, idx) => (
+                            <div key={idx} className="print:break-inside-avoid text-xs flex justify-between items-baseline">
+                              <div>
+                                <span className="font-bold text-zinc-900 block">{cert.name}</span>
+                                <span className="text-zinc-500 block mt-0.5">{cert.issuer}</span>
+                              </div>
+                              <span className="text-zinc-500 shrink-0 font-medium">{cert.date}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1618,6 +1634,7 @@ export default function CVBuilderPage() {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>
