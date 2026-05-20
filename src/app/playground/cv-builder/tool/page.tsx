@@ -499,7 +499,7 @@ export default function CVBuilderPage() {
                           </button>
                           <button
                             onClick={() => handlePolishExperience(idx, 'condense')}
-                            disabled={polishingIndex !== null || !exp.bullets.trim()}
+                            disabled={polishingIndex !== null || !exp.bullets.trim() || exp.bullets.split('\n').filter(b => b.trim().length > 0).length <= 1}
                             className="text-[8px] px-2 py-0.5 bg-pink-500/10 border border-pink-500/20 text-pink-400 font-bold uppercase rounded hover:bg-pink-500/20 transition-all disabled:opacity-50"
                             title="Remove least impactful point"
                           >

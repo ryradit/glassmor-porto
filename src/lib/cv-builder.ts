@@ -81,9 +81,9 @@ export async function improveExperienceAction(bullet: string, role: string, mode
 
   let modeInstructions = "4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.";
   if (mode === 'expand') {
-    modeInstructions = "4. Expand on the details. Extrapolate from the given information to generate exactly 1 or 2 MORE bullet points than originally provided to highlight implied skills for this role.";
+    modeInstructions = "4. Expand on the details. Extrapolate from the given information to generate EXACTLY ONE NEW bullet point. The total number of bullets in your output MUST be exactly one more than the original.";
   } else if (mode === 'condense') {
-    modeInstructions = "4. Condense the details. Remove the least impactful bullet point or merge points to strictly reduce the total number of bullet points by at least 1.";
+    modeInstructions = "4. Condense the details. Remove the least impactful bullet point. The total number of bullets in your output MUST be exactly one less than the original.";
   }
 
   const prompt = `You are a professional resume editor.
