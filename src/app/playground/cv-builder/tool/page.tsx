@@ -975,16 +975,20 @@ export default function CVBuilderPage() {
             {activeTab === 'resume' ? (
               <div className="space-y-6 relative z-10">
                 {/* Header branding */}
-                <div className="border-b-2 border-zinc-950 pb-4">
-                  <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name || 'John Doe'}</h2>
-                  <div className="flex justify-between items-start mt-2 flex-col sm:flex-row gap-2 text-sm font-bold">
-                    <span className="text-zinc-900">{title || 'Engineer Track'}</span>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600 font-medium">
+                <div className="border-b-2 border-zinc-950 pb-5">
+                  <div className="flex justify-between items-start gap-4">
+                    {/* Left: Name + Title */}
+                    <div>
+                      <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name || 'John Doe'}</h2>
+                      <p className="text-sm font-bold text-zinc-700 mt-1">{title || 'Engineer Track'}</p>
+                    </div>
+                    {/* Right: Contact details stacked */}
+                    <div className="flex flex-col items-end gap-0.5 text-xs text-zinc-600 font-medium shrink-0">
                       {email && <span>{email}</span>}
-                      {phone && <span className="border-l border-zinc-300 pl-3">{phone}</span>}
-                      {location && <span className="border-l border-zinc-300 pl-3">{location}</span>}
-                      {linkedin && <span className="border-l border-zinc-300 pl-3">{linkedin}</span>}
-                      {portfolio && <span className="border-l border-zinc-300 pl-3">{portfolio}</span>}
+                      {phone && <span>{phone}</span>}
+                      {location && <span>{location}</span>}
+                      {linkedin && <span>{linkedin}</span>}
+                      {portfolio && <span>{portfolio}</span>}
                     </div>
                   </div>
                 </div>
@@ -1153,18 +1157,23 @@ export default function CVBuilderPage() {
             ) : (
               <div className="space-y-6 relative z-10">
                 {/* Header branding for cover letter */}
-                <div className="border-b-2 border-zinc-950 pb-4">
-                  <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name}</h2>
-                  <div className="flex justify-between items-start mt-2 flex-col-reverse sm:flex-row gap-2 text-sm font-bold">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600 font-medium">
-                      {email && <span>{email}</span>}
-                      {phone && <span className="border-l border-zinc-300 pl-3">{phone}</span>}
-                      {location && <span className="border-l border-zinc-300 pl-3">{location}</span>}
-                      {linkedin && <span className="border-l border-zinc-300 pl-3">{linkedin}</span>}
-                      {portfolio && <span className="border-l border-zinc-300 pl-3">{portfolio}</span>}
+                <div className="border-b-2 border-zinc-950 pb-5">
+                  <div className="flex justify-between items-start gap-4">
+                    {/* Left: Name + Title */}
+                    <div>
+                      <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name}</h2>
+                      <p className="text-sm font-bold text-zinc-700 mt-1">{title || 'Engineer Track'}</p>
                     </div>
-                    <span className="text-xs font-black uppercase tracking-widest text-zinc-950">Cover Letter for {targetCompany}</span>
+                    {/* Right: Contact details stacked */}
+                    <div className="flex flex-col items-end gap-0.5 text-xs text-zinc-600 font-medium shrink-0">
+                      {email && <span>{email}</span>}
+                      {phone && <span>{phone}</span>}
+                      {location && <span>{location}</span>}
+                      {linkedin && <span>{linkedin}</span>}
+                      {portfolio && <span>{portfolio}</span>}
+                    </div>
                   </div>
+                  <p className="text-xs font-black uppercase tracking-widest text-zinc-950 mt-3">Cover Letter for {targetCompany}</p>
                 </div>
 
                 {/* Cover letter content */}
