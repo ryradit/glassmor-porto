@@ -228,9 +228,9 @@ function generateModernDocx(data: CVData): Document {
     })
   );
 
-  const addHeading = (text: string) => {
+  const addHeading = (text: string, icon: string) => {
     sections.push(new Paragraph({
-      children: [new TextRun({ text, bold: true, size: 28, color: INDIGO })],
+      children: [new TextRun({ text: `${icon} ${text}`, bold: true, size: 28, color: INDIGO })],
       spacing: { before: 300, after: 100 },
     }));
   };
@@ -243,67 +243,125 @@ function generateModernDocx(data: CVData): Document {
     }));
   }
 
+  const itemBorder = { left: { color: INDIGO, space: 15, style: BorderStyle.SINGLE, size: 12 } };
+
   if (data.experiences && data.experiences.length > 0) {
-    addHeading("Experience");
+    addHeading("Experience", "💻");
     data.experiences.forEach((exp) => {
       sections.push(
         new Paragraph({
           children: [new TextRun({ text: exp.role, bold: true }), new TextRun({ text: ` - ${exp.company}`, color: "555555" })],
           spacing: { before: 100 },
+          border: itemBorder
         }),
         new Paragraph({
           children: [new TextRun({ text: exp.period, color: INDIGO, bold: true }), new TextRun({ text: exp.type ? ` (${exp.type})` : '', color: "777777" })],
           spacing: { after: 100 },
+          border: itemBorder
         })
       );
       if (exp.bullets) {
         exp.bullets.split('\n').map(b => b.trim().replace(/^[-*•]\s*/, '')).filter(b => b.length > 0).forEach((bullet) => {
-          sections.push(new Paragraph({ text: bullet, bullet: { level: 0 } }));
+          sections.push(new Paragraph({ text: bullet, bullet: { level: 0 }, border: itemBorder }));
         });
       }
     });
   }
 
   if (data.education && data.education.length > 0) {
-    addHeading("Education");
+    addHeading("Education", "🎓");
     data.education.forEach((edu) => {
       sections.push(
         new Paragraph({
           children: [new TextRun({ text: edu.institution, bold: true }), new TextRun({ text: ` - ${edu.cityCountry}`, color: "555555" })],
           spacing: { before: 100 },
+          border: itemBorder
         }),
-        new Paragraph({ children: [new TextRun({ text: edu.degree })] }),
+        new Paragraph({ children: [new TextRun({ text: edu.degree })], border: itemBorder }),
         new Paragraph({
           children: [new TextRun({ text: edu.period, color: INDIGO, bold: true }), new TextRun({ text: edu.gpa ? ` | GPA: ${edu.gpa}` : '' })],
           spacing: { after: 100 },
+          border: itemBorder
         })
       );
-      if (edu.awards) sections.push(new Paragraph({ text: `Awards: ${edu.awards}`, bullet: { level: 0 } }));
-      if (edu.thesis) sections.push(new Paragraph({ text: `Thesis: ${edu.thesis}`, bullet: { level: 0 } }));
+      if (edu.awards) sections.push(new Paragraph({ text: `Awards: ${edu.awards}`, bullet: { level: 0 }, border: itemBorder }));
+      if (edu.thesis) sections.push(new Paragraph({ text: `Thesis: ${edu.thesis}`, bullet: { level: 0 }, border: itemBorder }));
     });
   }
 
+  const skillsCell: any[] = [];
+  const otherCell: any[] = [];
+
+  const addGridHeading = (text: string, icon: string, arr: any[]) => {
+    arr.push(new Paragraph({
+      children: [new TextRun({ text: `${icon} ${text}`, bold: true, size: 28, color: INDIGO })],
+      spacing: { before: 300, after: 100 },
+    }));
+  };
+
   if (data.hardSkills || data.softSkills) {
-    addHeading("Skills");
-    if (data.hardSkills) sections.push(new Paragraph({ children: [new TextRun({ text: "Technical: ", bold: true }), new TextRun({ text: data.hardSkills })] }));
-    if (data.softSkills) sections.push(new Paragraph({ children: [new TextRun({ text: "Soft Skills: ", bold: true }), new TextRun({ text: data.softSkills })] }));
+    addGridHeading("Skills", "⚡", skillsCell);
+    if (data.hardSkills) skillsCell.push(new Paragraph({ children: [new TextRun({ text: "Technical:\n", bold: true }), new TextRun({ text: data.hardSkills })], spacing: { after: 100 } }));
+    if (data.softSkills) skillsCell.push(new Paragraph({ children: [new TextRun({ text: "Soft Skills:\n", bold: true }), new TextRun({ text: data.softSkills })] }));
+  }
+
+  if (data.languages && data.languages.length > 0) {
+    addGridHeading("Languages", "🌍", otherCell);
+    data.languages.forEach((lang) => {
+      otherCell.push(new Paragraph({ children: [new TextRun({ text: lang.name, bold: true }), new TextRun({ text: ` - ${lang.proficiency}`, color: INDIGO })] }));
+    });
   }
 
   if (data.certifications && data.certifications.length > 0) {
-    addHeading("Certifications");
+    addGridHeading("Certifications", "🏆", otherCell);
     data.certifications.forEach((cert) => {
-      sections.push(
+      otherCell.push(
         new Paragraph({ children: [new TextRun({ text: cert.name, bold: true }), new TextRun({ text: ` (${cert.date})`, color: INDIGO, bold: true })] }),
         new Paragraph({ children: [new TextRun({ text: cert.issuer }), new TextRun({ text: cert.link ? ` - ${cert.link}` : '', color: "555555" })], spacing: { after: 100 } })
       );
     });
   }
 
-  if (data.languages && data.languages.length > 0) {
-    addHeading("Languages");
-    data.languages.forEach((lang) => {
-      sections.push(new Paragraph({ children: [new TextRun({ text: lang.name, bold: true }), new TextRun({ text: ` - ${lang.proficiency}`, color: INDIGO })] }));
-    });
+  if (skillsCell.length > 0 || otherCell.length > 0) {
+    sections.push(new Table({
+      borders: {
+        top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        insideHorizontal: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        insideVertical: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+      },
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              children: skillsCell.length > 0 ? skillsCell : [new Paragraph("")],
+              margins: { right: 200 },
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              }
+            }),
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              children: otherCell.length > 0 ? otherCell : [new Paragraph("")],
+              margins: { left: 200 },
+              borders: {
+                top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+              }
+            }),
+          ],
+        }),
+      ],
+    }));
   }
 
   return new Document({ sections: [{ properties: {}, children: sections }] });
