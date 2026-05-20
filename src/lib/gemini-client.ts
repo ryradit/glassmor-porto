@@ -55,7 +55,9 @@ export async function callGemini(
 /** Extracts the text response from a Gemini API response object */
 export function extractText(data: unknown): string {
   const d = data as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
-  const text = d?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('[Gemini] Unexpected response format — no text in candidates.');
+  const parts = d?.candidates?.[0]?.content?.parts;
+  if (!parts || parts.length === 0) throw new Error('[Gemini] Unexpected response format — no text in candidates.');
+  const text = parts.map(p => p.text ?? '').join('');
+  if (!text.trim()) throw new Error('[Gemini] Unexpected response format — empty text in candidates.');
   return text;
 }
