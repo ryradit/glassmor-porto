@@ -1,5 +1,7 @@
 'use server';
 
+import fs from 'fs';
+import path from 'path';
 import { callGemini, extractText } from '@/lib/gemini-client';
 
 export interface Experience {
@@ -151,4 +153,27 @@ Instructions:
     apiKey
   );
   return extractText(data).trim();
+}
+
+let cachedUniversities: string[] | null = null;
+
+export async function searchUniversitiesAction(query: string): Promise<string[]> {
+  if (!query || query.trim().length < 2) return [];
+  
+  try {
+    if (!cachedUniversities) {
+      const filePath = path.join(process.cwd(), 'universities.json');
+      if (fs.existsSync(filePath)) {
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        cachedUniversities = JSON.parse(fileContent);
+      } else {
+        cachedUniversities = [];
+      }
+    }
+    const lowerQuery = query.toLowerCase();
+    return cachedUniversities!.filter(item => item.toLowerCase().includes(lowerQuery)).slice(0, 10);
+  } catch (error) {
+    console.error('Error searching universities:', error);
+    return [];
+  }
 }

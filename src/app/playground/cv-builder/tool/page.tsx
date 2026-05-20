@@ -7,6 +7,7 @@ import {
   improveExperienceAction, 
   generateCoverLetterAction,
   improveSkillsAction,
+  searchUniversitiesAction,
   Experience,
   CVData,
   Education,
@@ -41,6 +42,8 @@ export default function CVBuilderPage() {
   const [summaryError, setSummaryError] = useState<string>('');
   const [experienceErrors, setExperienceErrors] = useState<Record<number, string>>({});
   const [skillsError, setSkillsError] = useState<string>('');
+  const [uniSearchResults, setUniSearchResults] = useState<Record<number, string[]>>({});
+  const [activeEduSearchIdx, setActiveEduSearchIdx] = useState<number | null>(null);
 
   const handleLoadDemo = () => {
     setName('Alex Morgan');
@@ -441,19 +444,54 @@ export default function CVBuilderPage() {
                     </button>
                     
                     <div className="grid grid-cols-2 gap-2 pr-4">
-                      <div className="space-y-1">
+                      <div className="space-y-1 relative">
                         <label className="text-[8px] font-bold uppercase text-zinc-500">Institution</label>
                         <input
                           type="text"
                           value={edu.institution}
                           placeholder="Beijing Institute of Technology"
-                          onChange={(e) => {
+                          onChange={async (e) => {
+                            const val = e.target.value;
                             const newEdu = [...education];
-                            newEdu[idx].institution = e.target.value;
+                            newEdu[idx].institution = val;
                             setEducation(newEdu);
+                            
+                            if (val.trim().length >= 2) {
+                              const results = await searchUniversitiesAction(val);
+                              setUniSearchResults(prev => ({ ...prev, [idx]: results }));
+                            } else {
+                              setUniSearchResults(prev => ({ ...prev, [idx]: [] }));
+                            }
+                          }}
+                          onFocus={() => {
+                            setActiveEduSearchIdx(idx);
+                          }}
+                          onBlur={() => {
+                            setTimeout(() => {
+                              setActiveEduSearchIdx(null);
+                            }, 200);
                           }}
                           className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
                         />
+                        {activeEduSearchIdx === idx && uniSearchResults[idx] && uniSearchResults[idx].length > 0 && (
+                          <div className="absolute left-0 right-0 mt-1 bg-[#120e25] border border-white/10 rounded-xl shadow-2xl z-50 max-h-[160px] overflow-y-auto divide-y divide-white/5">
+                            {uniSearchResults[idx].map((uniName, sIdx) => (
+                              <button
+                                key={sIdx}
+                                type="button"
+                                onMouseDown={() => {
+                                  const newEdu = [...education];
+                                  newEdu[idx].institution = uniName;
+                                  setEducation(newEdu);
+                                  setUniSearchResults(prev => ({ ...prev, [idx]: [] }));
+                                }}
+                                className="w-full text-left px-3 py-2 text-[10px] text-zinc-300 hover:bg-white/10 hover:text-white transition-all font-medium"
+                              >
+                                🏫 {uniName}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="space-y-1">
                         <label className="text-[8px] font-bold uppercase text-zinc-500">Degree / Major</label>
