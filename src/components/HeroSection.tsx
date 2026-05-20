@@ -86,7 +86,7 @@ const HeroSection = () => {
           {/* CTA Buttons with sleek Glassmorphism and main domain redirection */}
           <div className="flex flex-col sm:flex-row gap-4.5 justify-center items-center">
             <button 
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('playground')?.scrollIntoView({ behavior: 'smooth' })}
               className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-98 transition-all duration-300"
             >
               Explore Playground

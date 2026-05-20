@@ -18,7 +18,7 @@ const Navigation = () => {
     
     const handleScroll = () => {
       if (pathname !== '/') return;
-      const sections = ['home', 'about', 'skills', 'projects', 'contact'];
+      const sections = ['home', 'about', 'skills', 'playground', 'projects', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
