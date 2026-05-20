@@ -34,6 +34,7 @@ export default function CVBuilderPage() {
   const [languages, setLanguages] = useState<Language[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
+  const [cvLayout, setCvLayout] = useState<'standard' | 'ats' | 'modern' | 'compact'>('standard');
   
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isPolishingSummary, setIsPolishingSummary] = useState<boolean>(false);
@@ -982,6 +983,37 @@ export default function CVBuilderPage() {
                 <span>{isCopied ? 'Copied ✅' : activeTab === 'resume' ? 'Copy JSON Data' : 'Copy Text'}</span>
               </button>
             </div>
+
+            {/* Layout switcher — only visible when on resume tab */}
+            {activeTab === 'resume' && (
+              <div className="flex items-center gap-1.5 border border-zinc-700/50 rounded-lg px-2 py-1">
+                <span className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest mr-1">Layout:</span>
+                <button
+                  onClick={() => setCvLayout('standard')}
+                  className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded transition-all ${
+                    cvLayout === 'standard' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >Standard</button>
+                <button
+                  onClick={() => setCvLayout('ats')}
+                  className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded transition-all ${
+                    cvLayout === 'ats' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >ATS</button>
+                <button
+                  onClick={() => setCvLayout('modern')}
+                  className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded transition-all ${
+                    cvLayout === 'modern' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >Modern</button>
+                <button
+                  onClick={() => setCvLayout('compact')}
+                  className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded transition-all ${
+                    cvLayout === 'compact' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >Compact</button>
+              </div>
+            )}
           </div>
 
           {/* Print page layout styles */}
@@ -998,6 +1030,381 @@ export default function CVBuilderPage() {
           {/* Dynamic document sheets wrapper */}
           <div ref={componentRef} data-print-cv className="print:w-full print:m-0 print:p-0 print:shadow-none print:border-0 print:rounded-none print:overflow-visible p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
             {activeTab === 'resume' ? (
+              cvLayout === 'ats' ? (
+                /* ─── ATS Layout ─── */
+                <div className="space-y-3 text-zinc-950 font-sans">
+                  {/* ATS Header */}
+                  <div>
+                    <h2 className="text-2xl font-bold tracking-tight">{name || 'John Doe'}</h2>
+                    <p className="text-sm font-semibold text-zinc-700">{title || 'Engineer Track'}</p>
+                    <p className="text-xs text-zinc-600 mt-0.5">
+                      {[email, phone, location, linkedin, portfolio].filter(Boolean).join('  |  ')}
+                    </p>
+                  </div>
+                  <hr className="border-zinc-950 border-t-[1.5px]" />
+
+                  {/* ATS Summary */}
+                  {summary && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Summary</p>
+                      <p className="text-xs leading-relaxed text-zinc-800">{summary}</p>
+                    </div>
+                  )}
+
+                  {/* ATS Experience */}
+                  {experiences.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Experience</p>
+                      <hr className="border-zinc-400 mb-2" />
+                      <div className="space-y-3">
+                        {experiences.map((exp, i) => (
+                          <div key={i} className="print:break-inside-avoid">
+                            <div className="flex justify-between items-baseline">
+                              <span className="text-xs font-bold text-zinc-950">{exp.company || 'Company Name'}</span>
+                              <span className="text-xs text-zinc-600">{exp.period || 'Period'}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs italic text-zinc-700">{exp.role || 'Role Title'}</span>
+                              {exp.type && <span className="text-[9px] text-zinc-500">({exp.type})</span>}
+                            </div>
+                            {exp.bullets && (
+                              <div className="mt-0.5 space-y-0.5">
+                                {exp.bullets.split('\n').map((b, bi) => {
+                                  const clean = b.trim().replace(/^[-*•]\s*/, '');
+                                  if (!clean) return null;
+                                  return <p key={bi} className="text-xs text-zinc-700 pl-3">- {clean}</p>;
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ATS Education */}
+                  {education.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Education</p>
+                      <hr className="border-zinc-400 mb-2" />
+                      <div className="space-y-2">
+                        {education.map((edu, i) => (
+                          <div key={i} className="print:break-inside-avoid">
+                            <div className="flex justify-between items-baseline">
+                              <span className="text-xs font-bold text-zinc-950">{edu.institution || 'Institution'}</span>
+                              <span className="text-xs text-zinc-600">{edu.period}</span>
+                            </div>
+                            <div className="flex justify-between items-baseline">
+                              <span className="text-xs italic text-zinc-700">{edu.degree}</span>
+                              <span className="text-xs text-zinc-600">{edu.cityCountry}</span>
+                            </div>
+                            {edu.gpa && <p className="text-[10px] text-zinc-600">GPA: {edu.gpa}</p>}
+                            {edu.awards && <p className="text-[10px] text-zinc-600">Award: {edu.awards}</p>}
+                            {edu.thesis && <p className="text-[10px] text-zinc-600 italic">Thesis: {edu.thesis}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ATS Skills */}
+                  {(hardSkills || softSkills) && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Skills</p>
+                      <hr className="border-zinc-400 mb-2" />
+                      {hardSkills && <p className="text-xs text-zinc-700"><span className="font-bold">Technical:</span> {hardSkills}</p>}
+                      {softSkills && <p className="text-xs text-zinc-700"><span className="font-bold">Soft Skills:</span> {softSkills}</p>}
+                    </div>
+                  )}
+
+                  {/* ATS Languages */}
+                  {languages.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Languages</p>
+                      <hr className="border-zinc-400 mb-2" />
+                      <p className="text-xs text-zinc-700">{languages.map(l => `${l.name} (${l.proficiency})`).join('  |  ')}</p>
+                    </div>
+                  )}
+
+                  {/* ATS Certifications */}
+                  {certifications.length > 0 && (
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-950 mb-1">Certifications</p>
+                      <hr className="border-zinc-400 mb-2" />
+                      <div className="space-y-1">
+                        {certifications.map((cert, idx) => (
+                          <div key={idx} className="flex justify-between items-baseline print:break-inside-avoid">
+                            <span className="text-xs font-bold text-zinc-950">{cert.name}</span>
+                            <span className="text-xs text-zinc-600">{cert.issuer} · {cert.date}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : cvLayout === 'modern' ? (
+                /* ─── Modern Layout ─── */
+                <div className="space-y-6 text-zinc-900 font-sans">
+                  {/* Modern Header */}
+                  <div className="text-center pb-4 border-b border-indigo-200">
+                    <h2 className="text-4xl font-black tracking-tighter text-indigo-950">{name || 'John Doe'}</h2>
+                    <p className="text-md font-bold text-indigo-600 mt-1 uppercase tracking-widest">{title || 'Engineer Track'}</p>
+                    <div className="flex justify-center flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-500 font-medium mt-3">
+                      {email && <span>{email}</span>}
+                      {phone && <span>{phone}</span>}
+                      {location && <span>{location}</span>}
+                      {linkedin && <span>{linkedin}</span>}
+                      {portfolio && <span>{portfolio}</span>}
+                    </div>
+                  </div>
+
+                  {/* Modern Summary */}
+                  {summary && (
+                    <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/50">
+                      <p className="text-sm leading-relaxed text-zinc-700">{summary}</p>
+                    </div>
+                  )}
+
+                  {/* Modern Experience */}
+                  {experiences.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-black text-indigo-950 mb-4 flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">💻</span>
+                        Experience
+                      </h3>
+                      <div className="space-y-5 border-l-2 border-indigo-100 ml-3 pl-5">
+                        {experiences.map((exp, i) => (
+                          <div key={i} className="relative print:break-inside-avoid">
+                            <div className="absolute w-2 h-2 rounded-full bg-indigo-400 -left-[25px] top-1.5 ring-4 ring-white" />
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
+                              <h4 className="text-sm font-bold text-zinc-900">{exp.role || 'Role Title'} {exp.type && <span className="text-[10px] font-normal text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full ml-2">{exp.type}</span>}</h4>
+                              <span className="text-xs font-semibold text-indigo-600">{exp.period || 'Period'}</span>
+                            </div>
+                            <p className="text-xs font-medium text-zinc-500 mb-2">{exp.company || 'Company Name'}</p>
+                            {exp.bullets && (
+                              <div className="space-y-1.5">
+                                {exp.bullets.split('\n').map((b, bi) => {
+                                  const clean = b.trim().replace(/^[-*•]\s*/, '');
+                                  if (!clean) return null;
+                                  return (
+                                    <div key={bi} className="flex gap-2 text-xs text-zinc-600">
+                                      <span className="text-indigo-300 mt-0.5">•</span>
+                                      <p>{clean}</p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Modern Education */}
+                  {education.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-black text-indigo-950 mb-4 flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">🎓</span>
+                        Education
+                      </h3>
+                      <div className="space-y-4 border-l-2 border-indigo-100 ml-3 pl-5">
+                        {education.map((edu, i) => (
+                          <div key={i} className="relative print:break-inside-avoid">
+                            <div className="absolute w-2 h-2 rounded-full bg-indigo-400 -left-[25px] top-1.5 ring-4 ring-white" />
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
+                              <h4 className="text-sm font-bold text-zinc-900">{edu.degree}</h4>
+                              <span className="text-xs font-semibold text-indigo-600">{edu.period}</span>
+                            </div>
+                            <p className="text-xs font-medium text-zinc-500">{edu.institution} {edu.cityCountry && `— ${edu.cityCountry}`}</p>
+                            {(edu.gpa || edu.awards || edu.thesis) && (
+                              <div className="mt-2 text-xs text-zinc-600 space-y-0.5 bg-zinc-50 p-2.5 rounded-lg border border-zinc-100">
+                                {edu.gpa && <p><span className="font-semibold text-zinc-700">GPA:</span> {edu.gpa}</p>}
+                                {edu.awards && <p><span className="font-semibold text-zinc-700">Award:</span> {edu.awards}</p>}
+                                {edu.thesis && <p className="italic"><span className="not-italic font-semibold text-zinc-700">Thesis:</span> {edu.thesis}</p>}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Modern Skills & Languages Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {(hardSkills || softSkills) && (
+                      <div>
+                        <h3 className="text-lg font-black text-indigo-950 mb-3 flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">⚡</span>
+                          Skills
+                        </h3>
+                        <div className="space-y-2 text-xs text-zinc-600 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
+                          {hardSkills && <p><span className="font-bold text-zinc-900 block mb-1">Technical:</span> {hardSkills}</p>}
+                          {softSkills && <p className={hardSkills ? "pt-2" : ""}><span className="font-bold text-zinc-900 block mb-1">Soft Skills:</span> {softSkills}</p>}
+                        </div>
+                      </div>
+                    )}
+
+                    {(languages.length > 0 || certifications.length > 0) && (
+                      <div className="space-y-6">
+                        {languages.length > 0 && (
+                          <div>
+                            <h3 className="text-lg font-black text-indigo-950 mb-3 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">🌍</span>
+                              Languages
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                              {languages.map((l, i) => (
+                                <span key={i} className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">
+                                  {l.name} <span className="font-normal text-indigo-400">· {l.proficiency}</span>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {certifications.length > 0 && (
+                          <div>
+                            <h3 className="text-lg font-black text-indigo-950 mb-3 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">🏆</span>
+                              Certifications
+                            </h3>
+                            <div className="space-y-2">
+                              {certifications.map((cert, idx) => (
+                                <div key={idx} className="print:break-inside-avoid text-xs">
+                                  <p className="font-bold text-zinc-900">{cert.name}</p>
+                                  <p className="text-zinc-500">{cert.issuer} {cert.date && `· ${cert.date}`}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : cvLayout === 'compact' ? (
+                /* ─── Compact Layout ─── */
+                <div className="space-y-2 text-zinc-900 font-serif">
+                  {/* Compact Header */}
+                  <div className="text-center pb-2 border-b-2 border-zinc-800">
+                    <h2 className="text-2xl font-black tracking-tight text-zinc-950 uppercase">{name || 'John Doe'}</h2>
+                    <p className="text-xs font-bold text-zinc-800 mt-0.5 tracking-widest uppercase">{title || 'Engineer Track'}</p>
+                    <p className="text-[10px] text-zinc-600 mt-1">
+                      {[email, phone, location, linkedin, portfolio].filter(Boolean).join('  |  ')}
+                    </p>
+                  </div>
+
+                  {/* Compact Summary */}
+                  {summary && (
+                    <p className="text-[11px] leading-tight text-zinc-800 text-justify border-b border-zinc-200 pb-2">{summary}</p>
+                  )}
+
+                  {/* Compact Experience */}
+                  {experiences.length > 0 && (
+                    <div>
+                      <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Experience</h3>
+                      <div className="space-y-2 mt-1.5">
+                        {experiences.map((exp, i) => (
+                          <div key={i} className="print:break-inside-avoid">
+                            <div className="flex justify-between items-baseline">
+                              <p className="text-[11px]">
+                                <span className="font-bold text-zinc-950">{exp.company || 'Company Name'}</span>
+                                <span className="text-zinc-600 mx-1">|</span>
+                                <span className="italic text-zinc-800">{exp.role || 'Role Title'}</span>
+                                {exp.type && <span className="text-zinc-500 text-[9px] ml-1">({exp.type})</span>}
+                              </p>
+                              <span className="text-[10px] text-zinc-600 font-semibold">{exp.period || 'Period'}</span>
+                            </div>
+                            {exp.bullets && (
+                              <div className="mt-0.5 pl-3">
+                                {exp.bullets.split('\n').map((b, bi) => {
+                                  const clean = b.trim().replace(/^[-*•]\s*/, '');
+                                  if (!clean) return null;
+                                  return (
+                                    <div key={bi} className="flex gap-1.5 text-[10.5px] leading-tight text-zinc-800 mb-0.5">
+                                      <span>•</span>
+                                      <p>{clean}</p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Compact Education */}
+                  {education.length > 0 && (
+                    <div className="mt-2">
+                      <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Education</h3>
+                      <div className="space-y-1.5 mt-1.5">
+                        {education.map((edu, i) => (
+                          <div key={i} className="print:break-inside-avoid text-[11px]">
+                            <div className="flex justify-between items-baseline">
+                              <p>
+                                <span className="font-bold text-zinc-950">{edu.institution || 'Institution'}</span>
+                                {edu.cityCountry && <span className="text-zinc-600">, {edu.cityCountry}</span>}
+                              </p>
+                              <span className="text-[10px] text-zinc-600 font-semibold">{edu.period}</span>
+                            </div>
+                            <p className="italic text-zinc-800">{edu.degree}</p>
+                            {(edu.gpa || edu.awards || edu.thesis) && (
+                              <p className="text-[10px] text-zinc-600 mt-0.5">
+                                {[
+                                  edu.gpa && `GPA: ${edu.gpa}`,
+                                  edu.awards && `Award: ${edu.awards}`,
+                                  edu.thesis && `Thesis: ${edu.thesis}`
+                                ].filter(Boolean).join('  |  ')}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {/* Compact Skills */}
+                    {(hardSkills || softSkills) && (
+                      <div>
+                        <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Skills</h3>
+                        <div className="mt-1 text-[10.5px] leading-tight text-zinc-800">
+                          {hardSkills && <p><span className="font-bold">Tech:</span> {hardSkills}</p>}
+                          {softSkills && <p className="mt-0.5"><span className="font-bold">Soft:</span> {softSkills}</p>}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Compact Langs & Certs */}
+                    {(languages.length > 0 || certifications.length > 0) && (
+                      <div>
+                        {languages.length > 0 && (
+                          <div className="mb-2">
+                            <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Languages</h3>
+                            <p className="text-[10.5px] text-zinc-800 mt-1">{languages.map(l => `${l.name} (${l.proficiency})`).join(', ')}</p>
+                          </div>
+                        )}
+                        {certifications.length > 0 && (
+                          <div>
+                            <h3 className="text-[11px] font-black uppercase tracking-widest text-zinc-950 mb-1 border-b border-zinc-200 pb-0.5">Certifications</h3>
+                            <div className="mt-1 space-y-0.5">
+                              {certifications.map((cert, idx) => (
+                                <p key={idx} className="text-[10.5px] text-zinc-800 print:break-inside-avoid">
+                                  <span className="font-bold">{cert.name}</span>
+                                  <span className="text-zinc-600"> — {cert.issuer} {cert.date && `(${cert.date})`}</span>
+                                </p>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
               <div className="space-y-6 relative z-10">
                 {/* Header branding */}
                 <div className="border-b-2 border-zinc-950 pb-5">
@@ -1179,6 +1586,7 @@ export default function CVBuilderPage() {
                   </div>
                 )}
               </div>
+            )
             ) : (
               <div className="space-y-6 relative z-10">
                 {/* Header branding for cover letter */}
