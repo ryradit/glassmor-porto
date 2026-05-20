@@ -15,6 +15,10 @@ export const exportToDocx = async (data: CVData) => {
       children: [
         new TextRun({ text: data.title, bold: true }),
         new TextRun({ text: ` | ${data.email}` }),
+        ...(data.phone ? [new TextRun({ text: ` | ${data.phone}` })] : []),
+        ...(data.location ? [new TextRun({ text: ` | ${data.location}` })] : []),
+        ...(data.linkedin ? [new TextRun({ text: ` | ${data.linkedin}` })] : []),
+        ...(data.portfolio ? [new TextRun({ text: ` | ${data.portfolio}` })] : []),
       ],
       spacing: { after: 200 },
     })

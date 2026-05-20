@@ -21,6 +21,10 @@ export default function CVBuilderPage() {
   const [name, setName] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [linkedin, setLinkedin] = useState<string>('');
+  const [portfolio, setPortfolio] = useState<string>('');
   const [summary, setSummary] = useState<string>('');
   
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -57,6 +61,10 @@ export default function CVBuilderPage() {
     setName('Alex Morgan');
     setTitle('Senior Software Engineer');
     setEmail('alex.morgan@example.com');
+    setLocation('San Francisco, CA');
+    setPhone('+1 (555) 123-4567');
+    setLinkedin('linkedin.com/in/alexmorgan');
+    setPortfolio('alexmorgan.dev');
     setSummary(
       "Experienced software developer with 6+ years of expertise in TypeScript, React, Node.js, and cloud orchestration. Passionate about system architecture and writing clean, scalable code."
     );
@@ -313,6 +321,50 @@ export default function CVBuilderPage() {
                 placeholder="alex.morgan@example.com"
                 className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
               />
+            </div>
+
+            {/* Optional Contact Details */}
+            <div className="grid grid-cols-2 gap-3 relative z-10">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Location (Optional)</label>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="San Francisco, CA"
+                  className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Phone (Optional)</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+1 (555) 123-4567"
+                  className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">LinkedIn (Optional)</label>
+                <input
+                  type="text"
+                  value={linkedin}
+                  onChange={(e) => setLinkedin(e.target.value)}
+                  placeholder="linkedin.com/in/alex"
+                  className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Portfolio (Optional)</label>
+                <input
+                  type="text"
+                  value={portfolio}
+                  onChange={(e) => setPortfolio(e.target.value)}
+                  placeholder="alexmorgan.dev"
+                  className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
+                />
+              </div>
             </div>
 
             {/* Professional Summary */}
@@ -906,9 +958,15 @@ export default function CVBuilderPage() {
                 {/* Header branding */}
                 <div className="border-b-2 border-zinc-950 pb-4">
                   <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name || 'John Doe'}</h2>
-                  <div className="flex justify-between items-center mt-2 flex-wrap gap-2 text-sm font-bold">
+                  <div className="flex justify-between items-start mt-2 flex-col sm:flex-row gap-2 text-sm font-bold">
                     <span className="text-zinc-900">{title || 'Engineer Track'}</span>
-                    <span className="text-zinc-600 font-medium">{email}</span>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600 font-medium">
+                      {email && <span>{email}</span>}
+                      {phone && <span className="border-l border-zinc-300 pl-3">{phone}</span>}
+                      {location && <span className="border-l border-zinc-300 pl-3">{location}</span>}
+                      {linkedin && <span className="border-l border-zinc-300 pl-3">{linkedin}</span>}
+                      {portfolio && <span className="border-l border-zinc-300 pl-3">{portfolio}</span>}
+                    </div>
                   </div>
                 </div>
 
@@ -1067,8 +1125,14 @@ export default function CVBuilderPage() {
                 {/* Header branding for cover letter */}
                 <div className="border-b-2 border-zinc-950 pb-4">
                   <h2 className="text-3xl font-black tracking-tight text-zinc-950">{name}</h2>
-                  <div className="flex justify-between items-center mt-2 flex-wrap gap-2 text-sm font-bold">
-                    <span className="text-zinc-600 font-medium">{email}</span>
+                  <div className="flex justify-between items-start mt-2 flex-col-reverse sm:flex-row gap-2 text-sm font-bold">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600 font-medium">
+                      {email && <span>{email}</span>}
+                      {phone && <span className="border-l border-zinc-300 pl-3">{phone}</span>}
+                      {location && <span className="border-l border-zinc-300 pl-3">{location}</span>}
+                      {linkedin && <span className="border-l border-zinc-300 pl-3">{linkedin}</span>}
+                      {portfolio && <span className="border-l border-zinc-300 pl-3">{portfolio}</span>}
+                    </div>
                     <span className="text-xs font-black uppercase tracking-widest text-zinc-950">Cover Letter for {targetCompany}</span>
                   </div>
                 </div>
