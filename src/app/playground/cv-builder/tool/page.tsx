@@ -970,7 +970,7 @@ export default function CVBuilderPage() {
               </button>
 
               <button
-                onClick={() => exportToDocx({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages, certifications })}
+                onClick={() => exportToDocx({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages, certifications }, cvLayout)}
                 className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/35 hover:to-teal-500/35 text-[9px] font-black uppercase tracking-widest rounded-lg border border-emerald-500/35 text-white transition-all duration-300"
               >
                 <span>📝 Word DOCX</span>
