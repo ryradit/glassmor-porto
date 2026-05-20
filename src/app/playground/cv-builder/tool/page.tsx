@@ -970,8 +970,16 @@ export default function CVBuilderPage() {
             </div>
           </div>
 
+          {/* Print page layout styles */}
+          <style>{`
+            @media print {
+              @page { margin: 20mm 18mm; }
+              body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            }
+          `}</style>
+
           {/* Dynamic document sheets wrapper */}
-          <div ref={componentRef} className="print:w-full print:m-0 print:p-8 print:shadow-none p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
+          <div ref={componentRef} className="print:w-full print:m-0 print:p-0 print:shadow-none p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
             {activeTab === 'resume' ? (
               <div className="space-y-6 relative z-10">
                 {/* Header branding */}
@@ -1008,7 +1016,7 @@ export default function CVBuilderPage() {
                   ) : (
                     <div className="space-y-5">
                       {experiences.map((exp, i) => (
-                        <div key={i} className="space-y-1 relative">
+                        <div key={i} className="space-y-1 relative print:break-inside-avoid">
                           <div className="flex justify-between items-center flex-wrap gap-1.5">
                             <h5 className="text-sm font-black text-zinc-950">{exp.company || 'Company Name'}</h5>
                             <span className="text-xs text-zinc-600 font-semibold">{exp.period || 'Period'}</span>
@@ -1050,7 +1058,7 @@ export default function CVBuilderPage() {
                   ) : (
                     <div className="space-y-5">
                       {education.map((edu, i) => (
-                        <div key={i} className="space-y-1 relative">
+                        <div key={i} className="space-y-1 relative print:break-inside-avoid">
                           <div className="flex justify-between items-center flex-wrap gap-1.5">
                             <h5 className="text-sm font-black text-zinc-950">{edu.institution || 'Institution Name'}</h5>
                             <span className="text-xs text-zinc-600 font-semibold">{edu.period || 'Period'}</span>
@@ -1130,7 +1138,7 @@ export default function CVBuilderPage() {
                     
                     <div className="space-y-3">
                       {certifications.map((cert, idx) => (
-                        <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
+                        <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 print:break-inside-avoid">
                           <div className="space-y-0.5">
                             <h5 className="text-sm font-black text-zinc-950">
                               {cert.link ? (
