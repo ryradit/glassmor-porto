@@ -22,7 +22,7 @@ export const exportToDocx = async (data: CVData, layout: 'standard' | 'ats' | 'm
 // ─── GENERATORS ─────────────────────────────────────────────────────────────
 
 function generateAtsDocx(data: CVData): Document {
-  const sections: any[] = [];
+  const sections: (Paragraph | Table)[] = [];
   
   sections.push(
     new Paragraph({ text: data.name, heading: HeadingLevel.HEADING_1 }),
@@ -113,7 +113,7 @@ function generateAtsDocx(data: CVData): Document {
 }
 
 function generateStandardDocx(data: CVData): Document {
-  const sections: any[] = [];
+  const sections: (Paragraph | Table)[] = [];
   
   sections.push(
     new Paragraph({ text: data.name, heading: HeadingLevel.HEADING_1 }),
@@ -209,7 +209,7 @@ function generateStandardDocx(data: CVData): Document {
 }
 
 function generateModernDocx(data: CVData): Document {
-  const sections: any[] = [];
+  const sections: (Paragraph | Table)[] = [];
   const INDIGO = "4F46E5";
 
   sections.push(
@@ -289,10 +289,10 @@ function generateModernDocx(data: CVData): Document {
     });
   }
 
-  const skillsCell: any[] = [];
-  const otherCell: any[] = [];
+  const skillsCell: (Paragraph | Table)[] = [];
+  const otherCell: (Paragraph | Table)[] = [];
 
-  const addGridHeading = (text: string, icon: string, arr: any[]) => {
+  const addGridHeading = (text: string, icon: string, arr: (Paragraph | Table)[]) => {
     arr.push(new Paragraph({
       children: [new TextRun({ text: `${icon} ${text}`, bold: true, size: 28, color: INDIGO })],
       spacing: { before: 300, after: 100 },
@@ -368,8 +368,8 @@ function generateModernDocx(data: CVData): Document {
 }
 
 function generateTwoColumnDocx(data: CVData): Document {
-  const leftSections: any[] = [];
-  const rightSections: any[] = [];
+  const leftSections: (Paragraph | Table)[] = [];
+  const rightSections: (Paragraph | Table)[] = [];
   
   // LEFT COLUMN
   leftSections.push(new Paragraph({ children: [new TextRun({ text: data.name, bold: true, size: 36 })], spacing: { after: 100 } }));
