@@ -15,6 +15,7 @@ export interface Education {
   degree: string;
   period: string;
   cityCountry: string;
+  gpa?: string;
   awards?: string;
   thesis?: string;
 }

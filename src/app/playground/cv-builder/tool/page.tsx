@@ -76,6 +76,7 @@ export default function CVBuilderPage() {
         degree: 'Master of Computer Science & Technology',
         period: '2022 – 2024',
         cityCountry: 'Beijing, China',
+        gpa: '3.8/4.0',
         awards: 'Chinese Government Scholarship Recipient',
         thesis: 'Research on Large Language Models Fine-Tuning for Mental Health'
       }
@@ -125,7 +126,7 @@ export default function CVBuilderPage() {
   const handleAddEducation = () => {
     setEducation([
       ...education,
-      { institution: '', degree: '', period: '', cityCountry: '', awards: '', thesis: '' }
+      { institution: '', degree: '', period: '', cityCountry: '', gpa: '', awards: '', thesis: '' }
     ]);
   };
 
@@ -569,19 +570,35 @@ export default function CVBuilderPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-bold uppercase text-zinc-500">Awards / Scholarships</label>
-                      <input
-                        type="text"
-                        value={edu.awards || ''}
-                        placeholder="Chinese Government Scholarship"
-                        onChange={(e) => {
-                          const newEdu = [...education];
-                          newEdu[idx].awards = e.target.value;
-                          setEducation(newEdu);
-                        }}
-                        className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
-                      />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">GPA / Score</label>
+                        <input
+                          type="text"
+                          value={edu.gpa || ''}
+                          placeholder="3.8/4.0"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].gpa = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Awards / Scholarships</label>
+                        <input
+                          type="text"
+                          value={edu.awards || ''}
+                          placeholder="Chinese Government Scholarship"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].awards = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-1">
@@ -975,6 +992,11 @@ export default function CVBuilderPage() {
                             </span>
                             <span className="text-zinc-400 font-mono text-[9px]">{edu.cityCountry}</span>
                           </div>
+                          {edu.gpa && (
+                            <div className="text-[10px] text-zinc-400 pt-0.5">
+                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>GPA / Score:</strong> {edu.gpa}
+                            </div>
+                          )}
                           {edu.awards && (
                             <div className="text-[10px] text-zinc-400 pt-0.5">
                               <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>Award:</strong> {edu.awards}
