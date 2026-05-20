@@ -973,13 +973,16 @@ export default function CVBuilderPage() {
           {/* Print page layout styles */}
           <style>{`
             @media print {
-              @page { margin: 20mm 18mm; }
-              body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+              @page { margin: 20mm 18mm; size: A4; }
+              body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; }
+              /* Hide everything except the CV document */
+              body > * { display: none !important; }
+              [data-print-cv] { display: block !important; }
             }
           `}</style>
 
           {/* Dynamic document sheets wrapper */}
-          <div ref={componentRef} className="print:w-full print:m-0 print:p-0 print:shadow-none p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
+          <div ref={componentRef} data-print-cv className="print:w-full print:m-0 print:p-0 print:shadow-none print:border-0 print:rounded-none print:overflow-visible p-10 rounded-xl border shadow-xl bg-white text-zinc-950 font-sans min-h-[600px] overflow-hidden">
             {activeTab === 'resume' ? (
               <div className="space-y-6 relative z-10">
                 {/* Header branding */}
