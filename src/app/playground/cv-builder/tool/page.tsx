@@ -7,12 +7,12 @@ import {
   improveExperienceAction, 
   generateCoverLetterAction,
   improveSkillsAction,
-  searchUniversitiesAction,
   Experience,
   CVData,
   Education,
   Language
 } from '@/lib/cv-builder';
+import universities from '../../../../../universities.json';
 
 export default function CVBuilderPage() {
   const [name, setName] = useState<string>('');
@@ -450,14 +450,17 @@ export default function CVBuilderPage() {
                           type="text"
                           value={edu.institution}
                           placeholder="Beijing Institute of Technology"
-                          onChange={async (e) => {
+                          onChange={(e) => {
                             const val = e.target.value;
                             const newEdu = [...education];
                             newEdu[idx].institution = val;
                             setEducation(newEdu);
                             
                             if (val.trim().length >= 2) {
-                              const results = await searchUniversitiesAction(val);
+                              const lowerVal = val.toLowerCase();
+                              const results = universities
+                                .filter((uni: string) => uni.toLowerCase().includes(lowerVal))
+                                .slice(0, 10);
                               setUniSearchResults(prev => ({ ...prev, [idx]: results }));
                             } else {
                               setUniSearchResults(prev => ({ ...prev, [idx]: [] }));
