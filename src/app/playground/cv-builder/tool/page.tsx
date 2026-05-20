@@ -7,7 +7,9 @@ import {
   improveExperienceAction, 
   generateCoverLetterAction,
   Experience,
-  CVData
+  CVData,
+  Education,
+  Language
 } from '@/lib/cv-builder';
 
 export default function CVBuilderPage() {
@@ -17,6 +19,10 @@ export default function CVBuilderPage() {
   const [summary, setSummary] = useState<string>('');
   
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [education, setEducation] = useState<Education[]>([]);
+  const [hardSkills, setHardSkills] = useState<string>('');
+  const [softSkills, setSoftSkills] = useState<string>('');
+  const [languages, setLanguages] = useState<Language[]>([]);
 
   const [template, setTemplate] = useState<'glass' | 'cyber' | 'minimal'>('glass');
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
@@ -44,21 +50,39 @@ export default function CVBuilderPage() {
         company: 'TechFlow Inc.',
         role: 'Senior Developer',
         period: 'Jan 2024 – Now',
-        bullets: 'Architected microservices that reduced operational overhead by 25% and mentored junior development teams.'
+        bullets: 'Architected microservices that reduced operational overhead by 25% and mentored junior development teams.',
+        type: 'Full-Time'
       },
       {
         company: 'WebSphere Solutions',
         role: 'Frontend Engineer',
         period: 'Mar 2021 – Dec 2023',
-        bullets: 'Implemented responsive interfaces using Next.js and optimized client-side bundle sizes for 35% faster loads.'
+        bullets: 'Implemented responsive interfaces using Next.js and optimized client-side bundle sizes for 35% faster loads.',
+        type: 'Internship'
       }
+    ]);
+    setEducation([
+      {
+        institution: 'Beijing Institute of Technology',
+        degree: 'Master of Computer Science & Technology',
+        period: '2022 – 2024',
+        cityCountry: 'Beijing, China',
+        awards: 'Chinese Government Scholarship Recipient',
+        thesis: 'Research on Large Language Models Fine-Tuning for Mental Health'
+      }
+    ]);
+    setHardSkills('TypeScript, React, Next.js, Node.js, Python, PyTorch, Docker, Kubernetes, AWS');
+    setSoftSkills('Analytical Thinking, Team Leadership, Adaptability, Clear Communication');
+    setLanguages([
+      { name: 'English', proficiency: 'Professional Working Proficiency' },
+      { name: 'Mandarin Chinese', proficiency: 'Basic' }
     ]);
   };
 
   const handleCopy = () => {
     setIsCopied(true);
     const content = activeTab === 'resume' 
-      ? JSON.stringify({ name, title, email, summary, experiences }, null, 2)
+      ? JSON.stringify({ name, title, email, summary, experiences, education, hardSkills, softSkills, languages }, null, 2)
       : coverLetter;
     navigator.clipboard.writeText(content);
     setTimeout(() => setIsCopied(false), 2000);
@@ -67,13 +91,35 @@ export default function CVBuilderPage() {
   const handleAddExperience = () => {
     setExperiences([
       ...experiences,
-      { company: '', role: '', period: '', bullets: '' }
+      { company: '', role: '', period: '', bullets: '', type: 'Full-Time' }
     ]);
   };
 
   const handleRemoveExperience = (index: number) => {
     const newExps = experiences.filter((_, idx) => idx !== index);
     setExperiences(newExps);
+  };
+
+  const handleAddEducation = () => {
+    setEducation([
+      ...education,
+      { institution: '', degree: '', period: '', cityCountry: '', awards: '', thesis: '' }
+    ]);
+  };
+
+  const handleRemoveEducation = (index: number) => {
+    setEducation(education.filter((_, idx) => idx !== index));
+  };
+
+  const handleAddLanguage = () => {
+    setLanguages([
+      ...languages,
+      { name: '', proficiency: 'Professional Working Proficiency' }
+    ]);
+  };
+
+  const handleRemoveLanguage = (index: number) => {
+    setLanguages(languages.filter((_, idx) => idx !== index));
   };
 
   const handlePolishSummary = async () => {
@@ -114,7 +160,7 @@ export default function CVBuilderPage() {
     setIsGeneratingLetter(true);
     setLetterError('');
     try {
-      const cv: CVData = { name, title, email, summary, experiences };
+      const cv: CVData = { name, title, email, summary, experiences, education, hardSkills, softSkills, languages };
       const letter = await generateCoverLetterAction(cv, targetCompany);
       setCoverLetter(letter);
       setActiveTab('cover-letter');
@@ -223,16 +269,16 @@ export default function CVBuilderPage() {
             {/* Dynamic experiences */}
             <div className="space-y-4 pt-3 border-t border-white/5 relative z-10">
               <div className="flex justify-between items-center">
-                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Work History Blocks</label>
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Professional Experience (Work, Part-Time, Internship, etc.)</label>
                 <button
                   onClick={handleAddExperience}
-                  className="text-[9px] px-2.5 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase rounded-lg hover:bg-emerald-500/25 transition-all"
+                  className="text-[9px] px-2.5 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase rounded-lg hover:bg-emerald-500/25 transition-all shrink-0"
                 >
                   ➕ Add Experience
                 </button>
               </div>
 
-              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1 space-y-3">
+              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
                 {experiences.map((exp, idx) => (
                   <div key={idx} className="p-3 bg-white/5 rounded-2xl border border-white/5 space-y-3 relative">
                     <button
@@ -274,19 +320,39 @@ export default function CVBuilderPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-bold uppercase text-zinc-500">Period</label>
-                      <input
-                        type="text"
-                        value={exp.period}
-                        placeholder="Dec 2025 – Now"
-                        onChange={(e) => {
-                          const newExps = [...experiences];
-                          newExps[idx].period = e.target.value;
-                          setExperiences(newExps);
-                        }}
-                        className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
-                      />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Period</label>
+                        <input
+                          type="text"
+                          value={exp.period}
+                          placeholder="Dec 2025 – Now"
+                          onChange={(e) => {
+                            const newExps = [...experiences];
+                            newExps[idx].period = e.target.value;
+                            setExperiences(newExps);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Employment Type</label>
+                        <select
+                          value={exp.type || 'Full-Time'}
+                          onChange={(e) => {
+                            const newExps = [...experiences];
+                            newExps[idx].type = e.target.value;
+                            setExperiences(newExps);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 [&>option]:bg-[#0d091a] [&>option]:text-white"
+                        >
+                          <option value="Full-Time">Full-Time</option>
+                          <option value="Part-Time">Part-Time</option>
+                          <option value="Internship">Internship</option>
+                          <option value="Freelance">Freelance</option>
+                          <option value="Contract">Contract</option>
+                        </select>
+                      </div>
                     </div>
 
                     <div className="space-y-2">
@@ -312,6 +378,201 @@ export default function CVBuilderPage() {
                       />
                       {experienceErrors[idx] && <p className="text-[9px] text-rose-400 font-semibold">{experienceErrors[idx]}</p>}
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dynamic education */}
+            <div className="space-y-4 pt-3 border-t border-white/5 relative z-10">
+              <div className="flex justify-between items-center">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Education Blocks</label>
+                <button
+                  onClick={handleAddEducation}
+                  className="text-[9px] px-2.5 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase rounded-lg hover:bg-emerald-500/25 transition-all"
+                >
+                  ➕ Add Education
+                </button>
+              </div>
+
+              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+                {education.map((edu, idx) => (
+                  <div key={idx} className="p-3 bg-white/5 rounded-2xl border border-white/5 space-y-3 relative">
+                    <button
+                      onClick={() => handleRemoveEducation(idx)}
+                      className="absolute top-2 right-2 text-zinc-500 hover:text-rose-400 text-xs transition-colors p-1"
+                      title="Delete education"
+                    >
+                      ✕
+                    </button>
+                    
+                    <div className="grid grid-cols-2 gap-2 pr-4">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Institution</label>
+                        <input
+                          type="text"
+                          value={edu.institution}
+                          placeholder="Beijing Institute of Technology"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].institution = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Degree / Major</label>
+                        <input
+                          type="text"
+                          value={edu.degree}
+                          placeholder="Master of Computer Science"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].degree = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">Period</label>
+                        <input
+                          type="text"
+                          value={edu.period}
+                          placeholder="2022 – 2024"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].period = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-bold uppercase text-zinc-500">City / Country</label>
+                        <input
+                          type="text"
+                          value={edu.cityCountry}
+                          placeholder="Beijing, China"
+                          onChange={(e) => {
+                            const newEdu = [...education];
+                            newEdu[idx].cityCountry = e.target.value;
+                            setEducation(newEdu);
+                          }}
+                          className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-bold uppercase text-zinc-500">Awards / Scholarships</label>
+                      <input
+                        type="text"
+                        value={edu.awards || ''}
+                        placeholder="Chinese Government Scholarship"
+                        onChange={(e) => {
+                          const newEdu = [...education];
+                          newEdu[idx].awards = e.target.value;
+                          setEducation(newEdu);
+                        }}
+                        className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[8px] font-bold uppercase text-zinc-500">Research / Thesis (Optional)</label>
+                      <input
+                        type="text"
+                        value={edu.thesis || ''}
+                        placeholder="Research on Large Language Models"
+                        onChange={(e) => {
+                          const newEdu = [...education];
+                          newEdu[idx].thesis = e.target.value;
+                          setEducation(newEdu);
+                        }}
+                        className="w-full bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills section */}
+            <div className="space-y-3 pt-3 border-t border-white/5 relative z-10">
+              <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Skills Directory</label>
+              
+              <div className="space-y-2.5">
+                <div className="space-y-1">
+                  <label className="text-[8px] font-bold uppercase text-zinc-500">Hard Skills (Comma-separated)</label>
+                  <textarea
+                    value={hardSkills}
+                    placeholder="React, Next.js, Node.js, PyTorch..."
+                    onChange={(e) => setHardSkills(e.target.value)}
+                    className="w-full h-14 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 resize-none leading-relaxed placeholder-zinc-700"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[8px] font-bold uppercase text-zinc-500">Soft Skills (Comma-separated)</label>
+                  <textarea
+                    value={softSkills}
+                    placeholder="Analytical Thinking, Clear Communication..."
+                    onChange={(e) => setSoftSkills(e.target.value)}
+                    className="w-full h-14 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 resize-none leading-relaxed placeholder-zinc-700"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Languages section */}
+            <div className="space-y-4 pt-3 border-t border-white/5 relative z-10">
+              <div className="flex justify-between items-center">
+                <label className="text-[9px] font-black uppercase text-gray-400 tracking-wider">Languages</label>
+                <button
+                  onClick={handleAddLanguage}
+                  className="text-[9px] px-2.5 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase rounded-lg hover:bg-emerald-500/25 transition-all"
+                >
+                  ➕ Add Language
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-[150px] overflow-y-auto pr-1">
+                {languages.map((lang, idx) => (
+                  <div key={idx} className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5 relative">
+                    <input
+                      type="text"
+                      value={lang.name}
+                      placeholder="English"
+                      onChange={(e) => {
+                        const newLangs = [...languages];
+                        newLangs[idx].name = e.target.value;
+                        setLanguages(newLangs);
+                      }}
+                      className="flex-1 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20"
+                    />
+                    <select
+                      value={lang.proficiency}
+                      onChange={(e) => {
+                        const newLangs = [...languages];
+                        newLangs[idx].proficiency = e.target.value;
+                        setLanguages(newLangs);
+                      }}
+                      className="flex-1 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 [&>option]:bg-[#0d091a] [&>option]:text-white"
+                    >
+                      <option value="Professional Working Proficiency">Professional Working Proficiency</option>
+                      <option value="Intermediate Level">Intermediate Level</option>
+                      <option value="Basic">Basic</option>
+                    </select>
+                    <button
+                      onClick={() => handleRemoveLanguage(idx)}
+                      className="text-zinc-500 hover:text-rose-400 text-[10px] px-1.5"
+                    >
+                      ✕
+                    </button>
                   </div>
                 ))}
               </div>
@@ -441,8 +702,8 @@ export default function CVBuilderPage() {
                 {/* Experience details */}
                 <div className="space-y-4">
                   <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
-                    template === 'minimal' ? 'text-zinc-900' : 'text-zinc-400'
-                  }`}>Work Experience</h4>
+                    template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
+                  }`}>Professional Experience</h4>
                   
                   {experiences.length === 0 ? (
                     <p className="text-xs text-zinc-500 italic">No experiences added. Use the left panel to configure work blocks.</p>
@@ -456,9 +717,16 @@ export default function CVBuilderPage() {
                             }`}>{exp.company || 'Company Name'}</h5>
                             <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">{exp.period || 'Period'}</span>
                           </div>
-                          <div className={`text-[10px] font-bold ${
-                            template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-cyan-400' : 'text-purple-600'
-                          }`}>{exp.role || 'Role Title'}</div>
+                          <div className="flex items-center space-x-2">
+                            <span className={`text-[10px] font-bold ${
+                              template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-cyan-400' : 'text-purple-600'
+                            }`}>{exp.role || 'Role Title'}</span>
+                            {exp.type && (
+                              <span className="text-[8px] px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-zinc-400 font-bold uppercase">
+                                {exp.type}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-[11px] leading-relaxed font-medium opacity-80 pt-1.5 whitespace-pre-line">
                             {exp.bullets || 'Describe your daily workflow achievements...'}
                           </p>
@@ -467,6 +735,109 @@ export default function CVBuilderPage() {
                     </div>
                   )}
                 </div>
+
+                {/* Education section */}
+                <div className="space-y-4">
+                  <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
+                    template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
+                  }`}>Education</h4>
+                  
+                  {education.length === 0 ? (
+                    <p className="text-xs text-zinc-500 italic">No education added.</p>
+                  ) : (
+                    <div className="space-y-5">
+                      {education.map((edu, i) => (
+                        <div key={i} className="space-y-1 relative pl-4 border-l border-purple-500/20">
+                          <div className="flex justify-between items-center flex-wrap gap-1.5">
+                            <h5 className={`text-xs font-black ${
+                              template === 'minimal' ? 'text-zinc-900' : 'text-white'
+                            }`}>{edu.institution || 'Institution Name'}</h5>
+                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider font-mono">{edu.period || 'Period'}</span>
+                          </div>
+                          <div className="flex justify-between text-[10px] font-semibold opacity-90 flex-wrap">
+                            <span className={template === 'glass' ? 'text-purple-400' : template === 'cyber' ? 'text-cyan-400' : 'text-purple-600'}>
+                              {edu.degree || 'Degree Major'}
+                            </span>
+                            <span className="text-zinc-400 font-mono text-[9px]">{edu.cityCountry}</span>
+                          </div>
+                          {edu.awards && (
+                            <div className="text-[10px] text-zinc-400 pt-0.5">
+                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>Award:</strong> {edu.awards}
+                            </div>
+                          )}
+                          {edu.thesis && (
+                            <div className="text-[10px] text-zinc-400 italic pt-0.5">
+                              <strong className={template === 'minimal' ? 'text-zinc-700' : 'text-white'}>Thesis:</strong> {edu.thesis}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Skills section */}
+                {(hardSkills || softSkills) && (
+                  <div className="space-y-4">
+                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
+                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
+                    }`}>Skills Directory</h4>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                      {hardSkills && (
+                        <div className="space-y-1">
+                          <div className={`font-bold ${template === 'minimal' ? 'text-zinc-950' : 'text-white'}`}>Technical Skills</div>
+                          <div className="flex flex-wrap gap-1 pt-1">
+                            {hardSkills.split(',').map((skill, index) => {
+                              const trimmed = skill.trim();
+                              if (!trimmed) return null;
+                              return (
+                                <span key={index} className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[10px] font-medium text-zinc-300">
+                                  {trimmed}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {softSkills && (
+                        <div className="space-y-1">
+                          <div className={`font-bold ${template === 'minimal' ? 'text-zinc-950' : 'text-white'}`}>Soft Skills</div>
+                          <div className="flex flex-wrap gap-1 pt-1">
+                            {softSkills.split(',').map((skill, index) => {
+                              const trimmed = skill.trim();
+                              if (!trimmed) return null;
+                              return (
+                                <span key={index} className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[10px] font-medium text-zinc-300">
+                                  {trimmed}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Languages section */}
+                {languages.length > 0 && (
+                  <div className="space-y-4">
+                    <h4 className={`text-[10px] font-black uppercase tracking-widest border-t border-purple-500/10 pt-4 ${
+                      template === 'minimal' ? 'text-zinc-950' : 'text-zinc-400'
+                    }`}>Languages</h4>
+                    
+                    <div className="flex flex-wrap gap-3">
+                      {languages.map((lang, idx) => (
+                        <div key={idx} className="text-xs font-semibold flex items-center space-x-1.5">
+                          <span className={template === 'minimal' ? 'text-zinc-900' : 'text-white'}>{lang.name || 'Language'}</span>
+                          <span className="text-[9px] text-zinc-400 font-normal">({lang.proficiency})</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-6 relative z-10">

@@ -7,6 +7,21 @@ export interface Experience {
   role: string;
   period: string;
   bullets: string;
+  type?: string;
+}
+
+export interface Education {
+  institution: string;
+  degree: string;
+  period: string;
+  cityCountry: string;
+  awards?: string;
+  thesis?: string;
+}
+
+export interface Language {
+  name: string;
+  proficiency: string;
 }
 
 export interface CVData {
@@ -15,6 +30,10 @@ export interface CVData {
   email: string;
   summary: string;
   experiences: Experience[];
+  education?: Education[];
+  hardSkills?: string;
+  softSkills?: string;
+  languages?: Language[];
 }
 
 export async function improveSummaryAction(summary: string, targetRole: string): Promise<string> {
