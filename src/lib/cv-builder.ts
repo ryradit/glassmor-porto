@@ -105,7 +105,7 @@ Original Responsibilities:
 Instructions:
 1. The output MUST contain all the original points EXACTLY as they are written above.
 2. Add exactly one new bullet point at the end.
-3. The new point MUST be a complete, professional sentence (not just a single word or short phrase), using strong action verbs and the STAR methodology where possible.
+3. The new point MUST start on a new line and be a complete, professional sentence (minimum 10 words, not just a single word or short phrase). It must use strong action verbs and the STAR methodology where possible.
 4. Return ONLY the final text. Do not include introductory notes, quotes, or markdown wrappers.`;
   } else if (mode === 'condense') {
     prompt = `You are a professional resume editor.
@@ -125,7 +125,7 @@ Instructions:
   const data = await callGemini(
     {
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 512 },
+      generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
     },
     apiKey
   );
