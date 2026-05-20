@@ -29,7 +29,7 @@ Original Summary:
 
 Instructions:
 1. Focus on action verbs, clear outcomes, and technical expertise.
-2. Keep it to 2-3 sentences.
+2. The summary MUST have a minimum of 3 sentences and a maximum of 4 sentences to provide a balanced overview.
 3. Keep the tone premium, confident, and professional.
 4. Return ONLY the rewritten summary. Do not include introductory notes, quotes, or markdown wrappers.`;
 
@@ -57,8 +57,9 @@ Instructions:
 1. Use the STAR methodology (Situation, Task, Action, Result) where possible.
 2. Use strong action verbs (e.g., Designed, Spearheaded, Optimized).
 3. Do not invent details that are not there, but phrase them professionally and persuasively.
-4. Keep it concise, in a list of bullet points if appropriate, or as a tight cohesive paragraph depending on the inputs.
-5. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
+4. Format as a clean, compact bulleted list with a maximum of 4 to 5 points.
+5. Ensure each point is compact, highly descriptive, and avoids excessively long, wordy sentences that drift off-topic.
+6. Return ONLY the polished text. Do not include introductory notes, quotes, or markdown wrappers.`;
 
   const data = await callGemini(
     {
