@@ -75,12 +75,12 @@ Instructions:
   return extractText(data).trim();
 }
 
-export async function improveExperienceAction(bullet: string, role: string, mode: 'polish' | 'expand' | 'condense' = 'polish'): Promise<string> {
+export async function improveExperienceAction(bullet: string, role: string, company: string, mode: 'polish' | 'expand' | 'condense' = 'polish'): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('API key not configured');
 
   let prompt = `You are a professional resume editor.
-Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}".
+Rewrite the following job responsibilities bullet points to make them more impactful, achievement-oriented, and tailored to the target role of "${role}" at "${company}".
 
 Original Responsibilities:
 "${bullet}"
@@ -97,7 +97,7 @@ Instructions:
     prompt = `You are a professional resume editor.
 Your task is to ADD EXACTLY ONE NEW bullet point to the following job responsibilities. 
 DO NOT modify, edit, or remove ANY of the original bullet points. Keep them exactly as they are.
-Simply append one new highly professional bullet point that highlights implied skills for the target role of "${role}".
+Simply append one new highly professional bullet point that highlights implied skills for the target role of "${role}" at "${company}".
 
 Original Responsibilities:
 "${bullet}"
@@ -105,11 +105,11 @@ Original Responsibilities:
 Instructions:
 1. The output MUST contain all the original points EXACTLY as they are written above.
 2. Add exactly one new bullet point at the end.
-3. The new point should use strong action verbs and the STAR methodology where possible.
+3. The new point MUST be a complete, professional sentence (not just a single word or short phrase), using strong action verbs and the STAR methodology where possible.
 4. Return ONLY the final text. Do not include introductory notes, quotes, or markdown wrappers.`;
   } else if (mode === 'condense') {
     prompt = `You are a professional resume editor.
-Your task is to CONDENSE the following job responsibilities for the target role of "${role}".
+Your task is to CONDENSE the following job responsibilities for the target role of "${role}" at "${company}".
 
 Original Responsibilities:
 "${bullet}"

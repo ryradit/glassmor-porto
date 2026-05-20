@@ -191,7 +191,7 @@ export default function CVBuilderPage() {
     setPolishingIndex(index);
     setExperienceErrors(prev => ({ ...prev, [index]: '' }));
     try {
-      const result = await improveExperienceAction(bullets, experiences[index].role || title, mode);
+      const result = await improveExperienceAction(bullets, experiences[index].role || title, experiences[index].company || 'the company', mode);
       const newExps = [...experiences];
       newExps[index].bullets = result;
       setExperiences(newExps);
