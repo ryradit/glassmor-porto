@@ -683,8 +683,13 @@ export default function CVBuilderPage() {
                       }}
                       className="flex-1 bg-black/40 border border-white/5 rounded-lg p-2 text-[10px] text-white focus:outline-none focus:border-purple-500/20 [&>option]:bg-[#0d091a] [&>option]:text-white"
                     >
+                      <option value="Native / Bilingual">Native / Bilingual</option>
+                      <option value="Fluent">Fluent</option>
+                      <option value="Full Professional Proficiency">Full Professional Proficiency</option>
                       <option value="Professional Working Proficiency">Professional Working Proficiency</option>
+                      <option value="Limited Working Proficiency">Limited Working Proficiency</option>
                       <option value="Intermediate Level">Intermediate Level</option>
+                      <option value="Elementary">Elementary</option>
                       <option value="Basic">Basic</option>
                     </select>
                     <button
