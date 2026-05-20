@@ -11,27 +11,12 @@ import {
 } from '@/lib/cv-builder';
 
 export default function CVBuilderPage() {
-  const [name, setName] = useState<string>('Ryan Radityatama');
-  const [title, setTitle] = useState<string>('AI & Software Engineer');
-  const [email, setEmail] = useState<string>('ryradit@gmail.com');
-  const [summary, setSummary] = useState<string>(
-    "Software Engineer with a strong background in building smart and efficient digital solutions, specializing in React, Next.js, and custom MLOps pipelines."
-  );
+  const [name, setName] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [summary, setSummary] = useState<string>('');
   
-  const [experiences, setExperiences] = useState<Experience[]>([
-    {
-      company: 'DreamHost',
-      role: 'Website Success Associate',
-      period: 'Dec 2025 – Now',
-      bullets: 'Designed and launched responsive, user-focused web platforms and optimized cloud-based deployments.'
-    },
-    {
-      company: 'Trymerra AI Ltd.',
-      role: 'AI Engineer',
-      period: 'Mar 2025 – Jul 2025',
-      bullets: 'Built dynamic MVPs featuring automated AI CV parsing and recruitment mockups using React and Appwrite.'
-    }
-  ]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
 
   const [template, setTemplate] = useState<'glass' | 'cyber' | 'minimal'>('glass');
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
@@ -40,32 +25,32 @@ export default function CVBuilderPage() {
   const [isPolishingSummary, setIsPolishingSummary] = useState<boolean>(false);
   const [polishingIndex, setPolishingIndex] = useState<number | null>(null);
   
-  const [targetCompany, setTargetCompany] = useState<string>('DreamHost');
+  const [targetCompany, setTargetCompany] = useState<string>('TechFlow Inc.');
   const [coverLetter, setCoverLetter] = useState<string>('');
   const [isGeneratingLetter, setIsGeneratingLetter] = useState<boolean>(false);
   const [letterError, setLetterError] = useState<string>('');
   const [summaryError, setSummaryError] = useState<string>('');
   const [experienceErrors, setExperienceErrors] = useState<Record<number, string>>({});
 
-  const handleAutoFillRyan = () => {
-    setName('Ryan Radityatama');
-    setTitle('Senior AI & Software Engineer');
-    setEmail('ryradit@gmail.com');
+  const handleLoadDemo = () => {
+    setName('Alex Morgan');
+    setTitle('Senior Software Engineer');
+    setEmail('alex.morgan@example.com');
     setSummary(
-      "Master of Computer Science graduate from Beijing Institute of Technology. Experienced in developing computer vision pipelines, low-resource LLM fine-tuning, and robust full-stack applications."
+      "Experienced software developer with 6+ years of expertise in TypeScript, React, Node.js, and cloud orchestration. Passionate about system architecture and writing clean, scalable code."
     );
     setExperiences([
       {
-        company: 'DreamHost',
-        role: 'Website Success Associate',
-        period: 'Dec 2025 – Now',
-        bullets: 'Designed and deployed responsive client platforms, managed DNS/caching integrations, and optimized overall SEO metrics by 20%.'
+        company: 'TechFlow Inc.',
+        role: 'Senior Developer',
+        period: 'Jan 2024 – Now',
+        bullets: 'Architected microservices that reduced operational overhead by 25% and mentored junior development teams.'
       },
       {
-        company: 'AME Research',
-        role: 'Machine Learning Engineer',
-        period: 'Aug 2025 – Dec 2025',
-        bullets: 'Built PDF scraper algorithms and custom forecasting scripts, increasing data pipeline efficiency by 30%.'
+        company: 'WebSphere Solutions',
+        role: 'Frontend Engineer',
+        period: 'Mar 2021 – Dec 2023',
+        bullets: 'Implemented responsive interfaces using Next.js and optimized client-side bundle sizes for 35% faster loads.'
       }
     ]);
   };
@@ -171,10 +156,10 @@ export default function CVBuilderPage() {
             <h3 className="text-sm font-black tracking-widest text-white uppercase border-b border-white/5 pb-3 flex justify-between items-center relative z-10">
               <span>✍️ CV Workspace Panel</span>
               <button 
-                onClick={handleAutoFillRyan}
+                onClick={handleLoadDemo}
                 className="text-[9px] px-2.5 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 font-bold uppercase rounded-lg border border-purple-500/30 transition-all duration-300 hover:scale-102"
               >
-                Auto-Fill Preset
+                Load Demo Profile
               </button>
             </h3>
 
@@ -185,7 +170,7 @@ export default function CVBuilderPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ryan Radityatama"
+                placeholder="Alex Morgan"
                 className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
               />
             </div>
@@ -197,7 +182,7 @@ export default function CVBuilderPage() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Senior AI Engineer"
+                placeholder="Senior Software Engineer"
                 className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
               />
             </div>
@@ -209,7 +194,7 @@ export default function CVBuilderPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="ryradit@gmail.com"
+                placeholder="alex.morgan@example.com"
                 className="w-full bg-[#0d091a]/80 border border-white/5 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500/30 transition-all font-medium placeholder-zinc-700"
               />
             </div>
