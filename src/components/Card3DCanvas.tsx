@@ -33,37 +33,37 @@ export default function Card3DCanvas({ id }: Card3DProps) {
 
     // Geometries based on card ID
     let geometry: THREE.BufferGeometry;
-    let color = 0xa855f7; // default purple
+    let color = 0x3b82f6; // default blue
 
     switch (id) {
       case 'career-pathfinder':
         // Octahedron (Multi-Agent Node structure)
         geometry = new THREE.OctahedronGeometry(1.6, 0);
-        color = 0xa855f7; // Purple
+        color = 0x3b82f6; // Blue
         break;
       case 'ai-interview':
         // Cylinder (Communication / Database Nodes)
         geometry = new THREE.CylinderGeometry(1, 1, 2, 8, 3, true);
-        color = 0xec4899; // Pink
+        color = 0x6366f1; // Indigo
         break;
       case 'cv-analyzer':
         // Box/Cube (Parsed file structures)
         geometry = new THREE.BoxGeometry(1.4, 1.4, 1.4, 2, 2, 2);
-        color = 0xf43f5e; // Rose
+        color = 0x60a5fa; // Soft Blue
         break;
       case 'cv-builder':
         // Torus (Modular template ring)
         geometry = new THREE.TorusGeometry(1.1, 0.3, 8, 32);
-        color = 0xf97316; // Orange
+        color = 0x3b82f6; // Blue
         break;
       case 'case-study':
         // Dodecahedron (Strategic planning)
         geometry = new THREE.DodecahedronGeometry(1.5, 0);
-        color = 0x10b981; // Emerald/Green
+        color = 0x6366f1; // Indigo
         break;
       default:
         geometry = new THREE.IcosahedronGeometry(1.5, 0);
-        color = 0xa855f7;
+        color = 0x3b82f6;
     }
 
     // Material with double sided wireframe for holographic blueprint feel

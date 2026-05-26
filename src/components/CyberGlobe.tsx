@@ -44,7 +44,7 @@ export default function CyberGlobe() {
         // Draw circular gradient
         const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
         grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(0.3, 'rgba(168, 85, 247, 0.8)'); // Purple glow
+        grad.addColorStop(0.3, 'rgba(59, 130, 246, 0.8)'); // Blue glow
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, size, size);
@@ -60,7 +60,7 @@ export default function CyberGlobe() {
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      color: 0xa855f7, // Purple
+      color: 0x3b82f6, // Blue
     });
 
     const globePoints = new THREE.Points(sphereGeometry, pointsMaterial);
@@ -69,7 +69,7 @@ export default function CyberGlobe() {
     // Add glowing wireframe shell slightly larger than the points
     const shellGeometry = new THREE.SphereGeometry(sphereRadius + 0.05, 18, 18);
     const shellMaterial = new THREE.MeshBasicMaterial({
-      color: 0xec4899, // Pink
+      color: 0x6366f1, // Indigo
       wireframe: true,
       transparent: true,
       opacity: 0.06,
@@ -113,8 +113,8 @@ export default function CyberGlobe() {
       }
     };
 
-    createOrbitRing(sphereRadius + 1.2, 0xa855f7, Math.PI / 2.3, Math.PI / 6); // Purple ring
-    createOrbitRing(sphereRadius + 1.8, 0xec4899, Math.PI / 1.7, -Math.PI / 4); // Pink ring
+    createOrbitRing(sphereRadius + 1.2, 0x3b82f6, Math.PI / 2.3, Math.PI / 6); // Blue ring
+    createOrbitRing(sphereRadius + 1.8, 0x6366f1, Math.PI / 1.7, -Math.PI / 4); // Indigo ring
 
     // Drift starfield background
     const starsCount = 350;
@@ -128,16 +128,16 @@ export default function CyberGlobe() {
       starPositions[i + 1] = (Math.random() - 0.5) * 40;
       starPositions[i + 2] = (Math.random() - 0.5) * 40 - 5; // offset backward slightly
 
-      // Add cool cyan/purple/white star colors
+      // Add cool cyan/blue/white star colors
       const mix = Math.random();
       if (mix < 0.4) {
-        starColors[i] = 0.66; // R (purple)
-        starColors[i + 1] = 0.33; // G
-        starColors[i + 2] = 0.97; // B
+        starColors[i] = 0.23; // R (blue)
+        starColors[i + 1] = 0.51; // G
+        starColors[i + 2] = 0.96; // B
       } else if (mix < 0.7) {
-        starColors[i] = 0.93; // R (pink)
-        starColors[i + 1] = 0.28; // G
-        starColors[i + 2] = 0.6; // B
+        starColors[i] = 0.38; // R (indigo)
+        starColors[i + 1] = 0.4; // G
+        starColors[i + 2] = 0.94; // B
       } else {
         starColors[i] = 1.0; // White
         starColors[i + 1] = 1.0;

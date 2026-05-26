@@ -60,7 +60,7 @@ export default function NeuralNetwork() {
       if (ctx) {
         const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
         grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(0.4, 'rgba(236, 72, 153, 0.8)'); // Pink glow
+        grad.addColorStop(0.4, 'rgba(59, 130, 246, 0.8)'); // Blue glow
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 16, 16);
@@ -76,7 +76,7 @@ export default function NeuralNetwork() {
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      color: 0xec4899, // Pink
+      color: 0x3b82f6, // Blue
     });
 
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -84,7 +84,7 @@ export default function NeuralNetwork() {
 
     // Create line segments for connecting edges
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xa855f7, // Purple edges
+      color: 0x6366f1, // Indigo edges
       transparent: true,
       opacity: 0.15,
       blending: THREE.AdditiveBlending,

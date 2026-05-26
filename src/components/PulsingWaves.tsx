@@ -184,14 +184,14 @@ export default function PulsingWaves() {
 
           if (clamped > 0.6) {
             const t = (clamped - 0.6) / 0.4;
-            colorArray[i] = 0.93 + (0.13 - 0.93) * t;      // R
-            colorArray[i + 1] = 0.28 + (0.83 - 0.28) * t;  // G
-            colorArray[i + 2] = 0.60 + (0.93 - 0.60) * t;  // B
+            colorArray[i] = 0.23 + (0.58 - 0.23) * t;      // R
+            colorArray[i + 1] = 0.51 + (0.77 - 0.51) * t;  // G
+            colorArray[i + 2] = 0.96 + (0.99 - 0.96) * t;  // B
           } else {
             const t = clamped / 0.6;
-            colorArray[i] = 0.47 + (0.93 - 0.47) * t;      // R
-            colorArray[i + 1] = 0.31 + (0.28 - 0.31) * t;  // G
-            colorArray[i + 2] = 0.86 + (0.60 - 0.86) * t;  // B
+            colorArray[i] = 0.38 + (0.23 - 0.38) * t;      // R
+            colorArray[i + 1] = 0.40 + (0.51 - 0.40) * t;  // G
+            colorArray[i + 2] = 0.94 + (0.96 - 0.94) * t;  // B
           }
         }
       }

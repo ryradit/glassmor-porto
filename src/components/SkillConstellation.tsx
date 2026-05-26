@@ -39,7 +39,7 @@ export default function SkillConstellation() {
       if (ctx) {
         const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
         grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(0.3, 'rgba(168, 85, 247, 0.8)'); // Purple glow
+        grad.addColorStop(0.3, 'rgba(59, 130, 246, 0.8)'); // Blue glow
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 16, 16);
@@ -55,11 +55,11 @@ export default function SkillConstellation() {
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      color: 0xa855f7, // Purple
+      color: 0x3b82f6, // Blue
     });
 
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xec4899, // Pink
+      color: 0x6366f1, // Indigo
       transparent: true,
       opacity: 0.08,
       blending: THREE.AdditiveBlending,
