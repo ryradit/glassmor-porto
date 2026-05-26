@@ -22,7 +22,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     tag: 'Multi-Agent',
     description: 'Orchestrate four cooperating AI agents to scan your core drivers, log telemetry, and compile an interactive roadmap.',
     route: '/playground/career-pathfinder',
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-blue-600 to-indigo-600',
     emoji: '🧭',
     comingSoon: false
   },
@@ -32,7 +32,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     tag: 'Interactive AI',
     description: 'Practice mock technical interviews with an AI Team Lead and receive detailed score audits and verbal critiques.',
     route: '/playground/ai-interview',
-    color: 'from-pink-500 to-rose-400',
+    color: 'from-indigo-600 to-slate-700',
     emoji: '🎙️',
     comingSoon: true
   },
@@ -42,7 +42,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     tag: 'CV Scanner',
     description: 'Laser-scan your PDF resume against recruiter algorithms to extract visual roadblocks and keyword relevancy metrics.',
     route: '/playground/cv-analyzer',
-    color: 'from-rose-400 to-orange-400',
+    color: 'from-blue-600 to-slate-700',
     emoji: '📄',
     comingSoon: true
   },
@@ -52,7 +52,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     tag: 'Template Utility',
     description: 'Build premium resumes in real-time. Toggle glassmorphic templates and copy structured templates with one click.',
     route: '/playground/cv-builder',
-    color: 'from-orange-400 to-amber-500',
+    color: 'from-blue-600 to-indigo-600',
     emoji: '✍️',
     comingSoon: false
   },
@@ -62,7 +62,7 @@ const PLAYGROUNDS: PlaygroundItem[] = [
     tag: 'Strategy Audit',
     description: 'Analyze consulting scenarios, organize your strategy using SWOT and MECE trees, and receive strategic score grading.',
     route: '/playground/case-study',
-    color: 'from-green-400 to-teal-500',
+    color: 'from-indigo-600 to-slate-700',
     emoji: '💡',
     comingSoon: true
   }

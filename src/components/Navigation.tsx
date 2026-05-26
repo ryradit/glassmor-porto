@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 const Navigation = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isFeaturesDropdownOpen, setIsFeaturesDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,6 +18,8 @@ const Navigation = () => {
     setIsVisible(true);
     
     const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      
       if (pathname !== '/') return;
       const sections = ['home', 'about', 'skills', 'playground', 'projects', 'contact'];
       const currentSection = sections.find(section => {
@@ -106,7 +109,7 @@ const Navigation = () => {
 
   const navbarBrand = (
     <div className="flex flex-col items-start leading-none">
-      <span className="text-xl font-black tracking-widest bg-gradient-to-r from-purple-400 via-pink-500 to-rose-400 bg-clip-text text-transparent animate-pulse drop-shadow-[0_0_10px_rgba(168,85,247,0.45)]">
+      <span className="text-xl font-black tracking-widest bg-gradient-to-r from-purple-400 via-pink-500 to-rose-400 bg-clip-text text-transparent animate-pulse drop-shadow-[0_0_10px_rgba(59,130,246,0.45)]">
         EARTH-X
       </span>
       <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase mt-0.5 ml-0.5">
@@ -126,7 +129,11 @@ const Navigation = () => {
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
       <div className="max-w-6xl mx-auto px-6 py-4">
-        <nav className="glass-card px-6 py-4 border border-purple-500/10 flex items-center justify-between shadow-lg shadow-purple-950/5">
+        <nav className={`px-6 py-4 flex items-center justify-between transition-all duration-300 rounded-2xl ${
+          isScrolled 
+            ? 'bg-slate-950/95 border border-blue-500/35 shadow-2xl shadow-blue-950/50 backdrop-blur-xl' 
+            : 'glass-card border border-purple-500/10 shadow-lg shadow-purple-950/5'
+        }`}>
           {/* Logo / Brand */}
           <button onClick={() => scrollToSection('home')} className="flex items-center space-x-2 text-left focus:outline-none">
             {navbarBrand}
