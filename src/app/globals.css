@@ -1,17 +1,48 @@
 @import "tailwindcss";
 
+@theme {
+  /* Override Tailwind v4 colors so that existing helper classes automatically map to calm blues */
+  --color-purple-50: var(--color-blue-50);
+  --color-purple-100: var(--color-blue-100);
+  --color-purple-200: var(--color-blue-200);
+  --color-purple-300: var(--color-blue-300);
+  --color-purple-400: var(--color-blue-400);
+  --color-purple-500: var(--color-blue-500);
+  --color-purple-600: var(--color-blue-600);
+  --color-purple-700: var(--color-blue-700);
+  --color-purple-800: var(--color-blue-800);
+  --color-purple-900: var(--color-blue-900);
+  --color-purple-950: var(--color-blue-950);
+
+  --color-pink-50: var(--color-indigo-50);
+  --color-pink-100: var(--color-indigo-100);
+  --color-pink-200: var(--color-indigo-200);
+  --color-pink-300: var(--color-indigo-300);
+  --color-pink-400: var(--color-indigo-400);
+  --color-pink-500: var(--color-indigo-500);
+  --color-pink-600: var(--color-indigo-600);
+  --color-pink-700: var(--color-indigo-700);
+  --color-pink-800: var(--color-indigo-800);
+  --color-pink-900: var(--color-indigo-900);
+  --color-pink-950: var(--color-indigo-950);
+
+  --color-rose-300: var(--color-slate-300);
+  --color-rose-400: var(--color-slate-400);
+  --color-rose-500: var(--color-slate-500);
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --primary: #9333ea;
-  --secondary: #a855f7;
-  --accent: #c084fc;
-  --glass-bg: rgba(139, 69, 19, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
+  --background: #090d16;
+  --foreground: #f3f4f6;
+  --primary: #3b82f6;
+  --secondary: #6366f1;
+  --accent: #60a5fa;
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 body {
-  background: linear-gradient(135deg, #0f0f23, #1a0033, #2d1b69);
+  background: linear-gradient(135deg, #070a13, #0f172a, #1e293b);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   min-height: 100vh;
@@ -20,32 +51,32 @@ body {
 
 /* Glassmorphism utility classes */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
 }
 
 .glass-card {
-  background: rgba(147, 51, 234, 0.1);
+  background: rgba(59, 130, 246, 0.05);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(147, 51, 234, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.15);
   border-radius: 20px;
   transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-  background: rgba(147, 51, 234, 0.2);
-  border-color: rgba(147, 51, 234, 0.5);
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.12);
 }
 
 /* Animated gradient text */
 .gradient-text {
-  background: linear-gradient(45deg, #9333ea, #c084fc, #a855f7);
+  background: linear-gradient(45deg, #3b82f6, #93c5fd, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -77,11 +108,11 @@ body {
 
 /* Glow effects */
 .glow {
-  box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .glow:hover {
-  box-shadow: 0 0 30px rgba(147, 51, 234, 0.8);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
 }
 
 /* Line clamp utilities */
@@ -120,16 +151,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(147, 51, 234, 0.1);
+  background: rgba(59, 130, 246, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(147, 51, 234, 0.5);
+  background: rgba(59, 130, 246, 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 51, 234, 0.8);
+  background: rgba(59, 130, 246, 0.5);
 }
 
 /* Dropdown animations */
